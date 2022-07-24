@@ -15,6 +15,4 @@
 
 * Since "everything is a file", you can test if your device is working by directly writing bytes to the tty file: 
   * Turn it on: `echo -n -e '\xA0\x01\x00\xA1' > /dev/ttyUSB0`
-  * Turn it off: `echo -n -e '\xA0\x01\x01\xA2' > /dev/ttyUSB0`
-
-
+  * Turn it off: `echo -n -e '\xA0\x01\x00\xA1' > /dev/ttyUSB0`
