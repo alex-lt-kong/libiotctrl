@@ -3,6 +3,7 @@
 * C++ and Python code used to control an LCUS-1 USB relay.
 <br>
 <img src="./assets/device.jpg" width="480" />
+
 * On Linux, you don't usually need any extra drivers if you see the following in `dmesg`:
 
 ```
