@@ -1,6 +1,6 @@
 # LCUS-1 USB Relay Control
 
-* C++ and Python code used to control an LCUS-1 USB relay.
+* Control an LCUS-1 USB relay programmatically.
 <br>
 <img src="./assets/device.jpg" width="480" />
 
@@ -15,5 +15,5 @@
 ```
 
 * Since "everything is a file", you can test if your device is working by directly writing bytes to the tty file: 
-  * Turn it on: `echo -n -e '\xA0\x01\x00\xA1' > /dev/ttyUSB0`
+  * Turn it on:  `echo -n -e '\xA0\x01\x01\xA2' > /dev/ttyUSB0`
   * Turn it off: `echo -n -e '\xA0\x01\x00\xA1' > /dev/ttyUSB0`
