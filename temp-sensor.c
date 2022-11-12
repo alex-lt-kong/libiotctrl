@@ -19,6 +19,12 @@ int get_temperature(const char* sensor_path, const int enable_debug_output) {
   }
   uint8_t raw_req[] = { 0x01, 0x04, 0x04, 0x00, 0x00, 0x01 };
   // Note that we have to truncate the bytes series from 8 to 6 to make it work.
+  // Page 12 of the manufacturer manual documents the format of command bytes format:
+  // 1 byte:  device address
+  // 1 byte:  function code
+  // 2 bytes: register address
+  // 2 bytes: register number
+  // 2 bytes: CRC
   
   uint8_t rsp[MODBUS_RTU_MAX_ADU_LENGTH];
 
@@ -37,7 +43,12 @@ int get_temperature(const char* sensor_path, const int enable_debug_output) {
       modbus_free(ctx);
       return temp;
   }
-
+  // Page 12 of the manufacturer manual documents the format of reply bytes format:
+  // 1 byte:  device address
+  // 1 byte:  function code
+  // 1 byte:  number of bytes (N)
+  // N bytes: register number
+  // 2 bytes: CRC
   if (rsp[0] == 0x01 || rsp[1] == 0x04 || rsp[2] == 0x02) {
     temp = ((rsp[3] << 8) + rsp[4]);
   }
