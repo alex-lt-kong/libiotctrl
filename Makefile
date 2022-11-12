@@ -9,4 +9,7 @@ relay.so: relay.c
 temp-sensor.out: temp-sensor.c
 	gcc temp-sensor.c -o temp-sensor.out $(OPT) -lmodbus
 temp-sensor.so: temp-sensor.c
-	gcc -fPIC -shared -o temp-sensor.so $(OPT) -lmodbus
+	gcc -fPIC -shared -o temp-sensor.so temp-sensor.c $(OPT) -lmodbus
+
+clean:
+	rm *.out *.so

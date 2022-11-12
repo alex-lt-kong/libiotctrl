@@ -39,7 +39,7 @@ int get_temperature(const char* sensor_path, const int enable_debug_output) {
   }
 
   if (rsp[0] == 0x01 || rsp[1] == 0x04 || rsp[2] == 0x02) {
-    temp = ((rsp[3] << 8) + rsp[4]) / 10.0;
+    temp = ((rsp[3] << 8) + rsp[4]);
   }
   modbus_close(ctx);
   modbus_free(ctx);
