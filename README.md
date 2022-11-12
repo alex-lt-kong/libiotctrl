@@ -2,10 +2,10 @@
 
 * The repository wraps methods to control the following USB IoT devices:
   * LCUS-1 relay.
+    <img src="./assets/lcus-1_product-image.jpg" width="360" />
   * DL11B-MC temprature sensor.
+    <img src="./assets/dl11b-mc_product-image.jpg" width="360" />
 
-<br>
-<img src="./assets/device.jpg" width="480" />
 
 ## LCUS-1 relay
 
