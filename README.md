@@ -1,8 +1,13 @@
-# LCUS-1 USB Relay Control
+# USB IoT device control
 
-* Control an LCUS-1 USB relay programmatically.
+* The repository wraps methods to control the following USB IoT devices:
+  * LCUS-1 relay.
+  * DL11B-MC temprature sensor.
+
 <br>
 <img src="./assets/device.jpg" width="480" />
+
+## LCUS-1 relay
 
 * On Linux, you don't usually need any extra drivers if you see the following in `dmesg`:
 
@@ -17,3 +22,10 @@
 * Since "everything is a file", you can test if your device is working by directly writing bytes to the tty file: 
   * Turn it on:  `echo -n -e '\xA0\x01\x01\xA2' > /dev/ttyUSB0`
   * Turn it off: `echo -n -e '\xA0\x01\x00\xA1' > /dev/ttyUSB0`
+
+## DL11B-MC temprature sensor
+
+* `apt install libmodbus-dev`: provide support to Modbus RTU protocol.
+  * Can find its document [here](https://libmodbus.org/)
+
+* DL11B's Chinese manual from its manufacturer is saved [here](./assets/dl11-mc_manual.pdf)
