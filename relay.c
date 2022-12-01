@@ -22,7 +22,7 @@ int control_relay(char* relay_path, bool turn_on) {
   uint8_t on_command[] = {0xA0, 0x01, 0x01, 0xA2};
   size_t result = fwrite(turn_on ? on_command : off_command, sizeof(uint8_t), 4, fptr);
   if (result != 4) {
-    fprintf(stderr, "Failed to send command to relay, %d bytes, instead of 4 bytes, are written.\n", result);
+    fprintf(stderr, "Failed to send command to relay, %lu bytes, instead of 4 bytes, are written.\n", result);
     return 3;            
   }
   
