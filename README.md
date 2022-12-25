@@ -7,8 +7,8 @@ needed:
   * DL11B-MC temprature sensor.
     <img src="./assets/dl11b-mc_product-image.jpg" width="360" />
 
-
-## LCUS-1 relay
+## Device details
+### LCUS-1 relay
 
 * On Linux, you don't usually need any extra drivers if you see the following in `dmesg`:
 
@@ -24,9 +24,24 @@ needed:
   * Turn it on:  `echo -n -e '\xA0\x01\x01\xA2' > /dev/ttyUSB0`
   * Turn it off: `echo -n -e '\xA0\x01\x00\xA1' > /dev/ttyUSB0`
 
-## DL11B-MC temprature sensor
+### DL11B-MC temprature sensor
 
 * `apt install libmodbus-dev`: provide support to Modbus RTU protocol.
   * Can find its document [here](https://libmodbus.org/)
 
 * DL11B's Chinese manual from its manufacturer is saved [here](./assets/dl11-mc_manual.pdf)
+
+## Build and install
+
+* Build
+```
+mkdir -p ./build
+cd build
+cmake ../
+make
+```
+
+* Install
+```
+make install
+```
