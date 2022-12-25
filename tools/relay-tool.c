@@ -7,14 +7,13 @@ void print_help() {
     printf(
         "Usage: relay-tool\n"
         "    -d, --device-path <device_path>   The path of the device, typically /dev/ttyUSB0\n"
-        "    --on                              Turn the switch on\n"
-        "    --off                             Turn the switch off\n"
+        "    --on, --off                       Turn the switch on/off\n"
     );
 }
 
 int main(int argc, char** argv) {
     char* device_path = NULL;
-    static bool switch_on = false;
+    static int switch_on = 0;
     int c;
     // https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
     while (1) {
