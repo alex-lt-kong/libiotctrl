@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include "../src/temp-sensor.h"
 
-
 void print_help() {
     printf(
         "Usage: temp-sensor-tool\n"
