@@ -58,12 +58,3 @@ int get_temperature(const char* sensor_path, const int enable_debug_output) {
   modbus_free(ctx);
   return temp;
 }
-
-int main(int argc, char** argv) {
-  if (argc != 3) {
-    printf("Usage: ./temp-sensor.out <sensor_path> <debug_mode>\n");
-    return 1;
-  }
-  printf("%d\n", get_temperature(argv[1], atoi(argv[2])));
-  return 0;
-}

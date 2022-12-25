@@ -1,6 +1,7 @@
-# USB IoT device control
+# libiotctrl
 
-* The repository wraps methods to control the following USB IoT devices:
+* The repository wraps methods to control the following IoT devices in C and provides other language bindings when 
+needed:
   * LCUS-1 relay.
     <img src="./assets/lcus-1_product-image.jpg" width="360" />
   * DL11B-MC temprature sensor.
@@ -13,7 +14,7 @@
 
 ```
 # dmesg | grep tty
-[    0.045680] printk: console [tty0] enabled
+[    0.045680] print: console [tty0] enabled
 [    1.025659] 00:00: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
 [    1.532197] systemd[1]: Created slice system-getty.slice.
 [    5.121271] usb 4-1: ch341-uart converter now attached to ttyUSB0
