@@ -1,6 +1,6 @@
 # libiotctrl
 
-* The repository wraps methods to control the following IoT devices in C and provides other language bindings when 
+* The repository wraps methods to control the following IoT devices in C and provides language bindings when 
 needed:
   * LCUS-1 relay (`relay.c`/`relay.h`).
     <br />

@@ -7,6 +7,9 @@
 
 #define INVALID_TEMP 0x7FFF
 
+const size_t invalid_temp = INVALID_TEMP;
+// So that the variable will be in the so library file, which can be read by language bindings
+
 /**
  * @param sensor_path path of the temperature sensor, typically something like "/dev/ttyUSB0"
  * @param enable_debug_output pass 1 to print debug info to stdout/stderr

@@ -9,11 +9,16 @@ add_library(temp-sensor temp-sensor.c)
 add_library(relay relay.c)
 add_library(iotctrl SHARED relay temp-sensor)
 
-target_link_libraries(iotctrl)
+target_link_libraries(iotctrl modbus)
 
 set_target_properties(iotctrl PROPERTIES PUBLIC_HEADER "temp-sensor.h;relay.h;")
 
 install(TARGETS iotctrl 
         LIBRARY DESTINATION lib
         PUBLIC_HEADER DESTINATION include/iotctrl
+)
+
+add_custom_command(
+    TARGET iotctrl POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:iotctrl>  ${CMAKE_SOURCE_DIR}/src/bindings/python
 )
