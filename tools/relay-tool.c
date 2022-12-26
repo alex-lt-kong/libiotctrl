@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <getopt.h>
-#include "../src/relay.h"
+#include <iotctrl/relay.h>
 
 void print_help() {
     printf(

@@ -2,10 +2,10 @@
 
 * The repository wraps methods to control the following IoT devices in C and provides other language bindings when 
 needed:
-  * LCUS-1 relay.
-    <img src="./assets/lcus-1_product-image.jpg" width="360" />
-  * DL11B-MC temprature sensor.
-    <img src="./assets/dl11b-mc_product-image.jpg" width="360" />
+  * LCUS-1 relay (`relay.c`/`relay.h`).
+    <img src="./assets/lcus-1_product-image.jpg" width="240" />
+  * DL11B-MC temprature sensor (`temp-sensor.c`/`temp-sensor.h`).
+    <img src="./assets/dl11b-mc_product-image.jpg" width="240" />
 
 ## Device details
 ### LCUS-1 relay
@@ -45,3 +45,18 @@ make
 ```
 make install
 ```
+
+### temp-sensor's Node.js binding
+
+* Dependencies
+  * `node` (>= v14.18) and `npm` (>= 6.14)
+  * `node-gyp`: `npm install node-gyp`
+
+* Build
+```
+cd ./src/bindings/node
+node-gyp configure
+node-gyp build
+```
+
+* Test: `node temp_sensor.js`

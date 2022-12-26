@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <stdbool.h>
-#include "../src/temp-sensor.h"
+#include <iotctrl/temp-sensor.h>
 
 void print_help() {
     printf(
