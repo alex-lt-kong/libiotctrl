@@ -28,12 +28,14 @@ needed:
 
 ### DL11B-MC temprature sensor
 
-* `apt install libmodbus-dev`: provide support to Modbus RTU protocol.
-  * Can find its document [here](https://libmodbus.org/)
-
-* DL11B's Chinese manual from its manufacturer is saved [here](./assets/dl11-mc_manual.pdf)
+* The Chinese manual from its manufacturer is saved [here](./assets/dl11-mc_manual.pdf)
 
 ## Build and install
+
+* Dependencies
+  * `cmake` to generate `Makefile`: `apt install cmake`
+  * `libmodbus` to provide support to Modbus RTU protocol: `apt install libmodbus-dev`
+    * Can find its document [here](https://libmodbus.org/)
 
 * Build
 ```
@@ -48,13 +50,16 @@ make
 make install
 ```
 
-### temp-sensor's Node.js binding
+### Node.js binding
+
+* Node.js binding is provided for temp-sensor only.
 
 * Dependencies
   * `node` (>= v14.18) and `npm` (>= 6.14)
-  * `node-gyp`: `npm install node-gyp`
+  * `node-gyp` to build Node.js native addon: `npm install node-gyp`
+  * Built `libiotctrl.so` according to [Build and install](#build-and-install)
 
-* Build
+* Build Node.js native addon
 ```
 cd ./src/bindings/node
 node-gyp configure
@@ -62,3 +67,17 @@ node-gyp build
 ```
 
 * Test: `node temp_sensor.js`
+
+### Python binding
+
+* Python binding is provided for both temp-sensor and relay.
+
+* Dependency:
+  * Python 3.9
+  * Built `libiotctrl.so` according to [Build and install](#build-and-install)
+
+* Build
+```
+cd ./src/bindings/python
+python3 ./iotctrl.py
+```
