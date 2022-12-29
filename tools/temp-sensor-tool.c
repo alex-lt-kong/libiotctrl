@@ -71,13 +71,12 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-
     int temp_raw = get_temperature(device_path, verbose_mode);
     if (temp_raw == INVALID_TEMP) {
-    fprintf(stderr, "failed to read from sensor.\n");
+        fprintf(stderr, "failed to read from sensor.\n");
     } else {
-    float temp_parsed = temp_raw / 10.0;
-    printf("%.1f °C\n", temp_parsed);
-    }  
+        float temp_parsed = temp_raw / 10.0;
+        printf("%.1f °C\n", temp_parsed);
+    }
     return 0;
 }

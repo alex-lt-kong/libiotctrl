@@ -4,7 +4,7 @@
 
 
 int get_temperature(const char* sensor_path, const int enable_debug_output) {
-    modbus_t *ctx = NULL;
+    modbus_t* ctx = NULL;
     int temp = INVALID_TEMP;
     ctx = modbus_new_rtu(sensor_path, 9600, 'N', 8, 1);
     if (ctx == NULL) {
@@ -52,10 +52,11 @@ int get_temperature(const char* sensor_path, const int enable_debug_output) {
 
 finally:
     if (ctx != NULL) {
-        if (modbus_connect(ctx) != -1) {
-            modbus_close(ctx);
-        }
+        // Can close after checking modbus_connect(ctx) == -1 again:
+        // an established connection could not be established one more time, causing the test to fail and left
+        // the context open.
+        modbus_close(ctx);
         modbus_free(ctx);
-    }
+    } 
     return temp;
 }
