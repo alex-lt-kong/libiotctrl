@@ -1,3 +1,6 @@
+#ifndef LIBIOTCTRL_RELAY_H
+#define LIBIOTCTRL_RELAY_H
+
 #include <stdbool.h>
 
 /**
@@ -7,4 +10,6 @@
  * @returns 0 means success or an error code will be returned.
  * */
 
-int control_relay(char* relay_path, bool turn_on);
+int control_relay(const char *relay_path, bool turn_on);
+
+#endif /* LIBIOTCTRL_RELAY_H */

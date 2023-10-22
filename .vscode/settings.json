@@ -1,5 +1,3 @@
 {
-  "files.associations": {
-    "temp-sensor.h": "c"
-  }
+  "editor.formatOnSave": true
 }
