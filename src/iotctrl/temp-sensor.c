@@ -3,11 +3,13 @@
 #include <modbus/modbus.h>
 
 #include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-int get_temperature(const char *sensor_path, const int enable_debug_output) {
+int16_t get_temperature(const char *sensor_path,
+                        const int enable_debug_output) {
   modbus_t *ctx = NULL;
-  int temp = INVALID_TEMP;
+  int16_t temp = INVALID_TEMP;
   ctx = modbus_new_rtu(sensor_path, 9600, 'N', 8, 1);
   if (ctx == NULL) {
     fprintf(stderr, "Unable to create the libmodbus context\n");

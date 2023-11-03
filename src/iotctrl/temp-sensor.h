@@ -1,12 +1,12 @@
 #ifndef LIBIOTCTRL_TEMP_SENSOR_H
 #define LIBIOTCTRL_TEMP_SENSOR_H
 
-#include <stdio.h>
+#include <stdint.h>
 
 #define INVALID_TEMP 0x7FFF
 // So that the variable will be in the so library file, which can be read by
 // language bindings
-const size_t invalid_temp = INVALID_TEMP;
+const uint16_t invalid_temp = INVALID_TEMP;
 
 /**
  * @param sensor_path path of the temperature sensor, typically something like
@@ -16,6 +16,6 @@ const size_t invalid_temp = INVALID_TEMP;
  * the function failes to query a reading. E.g., return value of 321 means it
  * is 32.1 °C
  */
-int get_temperature(const char *sensor_path, const int enable_debug_output);
+int16_t get_temperature(const char *sensor_path, const int enable_debug_output);
 
 #endif /* LIBIOTCTRL_TEMP_SENSOR_H */

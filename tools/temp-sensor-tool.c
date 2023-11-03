@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void print_help() {
   printf("Usage: temp-sensor-tool\n"
@@ -70,7 +71,7 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  int temp_raw = get_temperature(device_path, verbose_mode);
+  int16_t temp_raw = get_temperature(device_path, verbose_mode);
   if (temp_raw == INVALID_TEMP) {
     fprintf(stderr, "failed to read from sensor.\n");
   } else {
