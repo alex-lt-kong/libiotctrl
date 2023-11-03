@@ -1,10 +1,29 @@
-#include "temp-sensor.h"
+#include "iotctrl/temp-sensor.h"
 
 #include <modbus/modbus.h>
 
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+uint16_t calculate_crc(const uint8_t *buf, size_t len) {
+  uint16_t crc = 0xFFFF;
+
+  for (size_t pos = 0; pos < len; pos++) {
+    crc ^= (uint16_t)buf[pos]; // XOR byte into least sig. byte of crc
+
+    for (int i = 8; i != 0; i--) { // Loop over each bit
+      if ((crc & 0x0001) != 0) {   // If the LSB is set
+        crc >>= 1;                 // Shift right and XOR 0xA001
+        crc ^= 0xA001;
+      } else       // Else LSB is not set
+        crc >>= 1; // Just shift right
+    }
+  }
+  // Note, this number has low and high bytes swapped, so use it accordingly (or
+  // swap bytes)
+  return crc;
+}
 
 int16_t get_temperature(const char *sensor_path,
                         const int enable_debug_output) {
@@ -58,6 +77,22 @@ int16_t get_temperature(const char *sensor_path,
 
   if (rsp[0] == 0x01 || rsp[1] == 0x04 || rsp[2] == 0x02) {
     temp = ((rsp[3] << 8) + rsp[4]);
+    if (temp == INVALID_TEMP) {
+      fprintf(stderr,
+              "Reading is INVALID_TEMP(%d). The sensor might be non-existent "
+              "or malfunctional\n",
+              INVALID_TEMP);
+    }
+    uint16_t calculated_crc = calculate_crc(rsp, 5);
+    uint16_t expected_crc = (rsp[6] << 8) + rsp[5];
+    if (calculated_crc != expected_crc) {
+      fprintf(stderr, "CRC value does not match!\n");
+    }
+  } else {
+    fprintf(stderr,
+            "Invalid response header, expecting 0x01, 0x04, 0x02, but gets "
+            "%#04x, %#04x, %#04x\n",
+            rsp[0], rsp[1], rsp[2]);
   }
 
 finally:

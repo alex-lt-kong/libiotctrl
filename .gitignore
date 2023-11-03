@@ -1,7 +1,11 @@
 build/
 *.node
 
+#
+#
 # ===== Node.js =====
+#
+#
 # Logs
 logs
 *.log
@@ -133,8 +137,11 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+#
+#
 # ===== C =====
-
+#
+#
 # Prerequisites
 *.d
 
@@ -188,7 +195,11 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+#
+#
 # ===== VS Code =====
+#
+#
 # Prerequisites
 *.d
 
@@ -243,7 +254,11 @@ Mkfile.old
 dkms.conf
 *.out
 
+#
+#
 # ===== Python =====
+#
+#
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -405,8 +420,11 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+#
+#
 # ===== VS Code =====
-
+#
+#
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

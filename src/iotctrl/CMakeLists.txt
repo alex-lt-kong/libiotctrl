@@ -1,17 +1,20 @@
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+
 find_library(MODBUS_LIB modbus)
-if(NOT MODBUS_LIB)
-    message(FATAL_ERROR "modbus library not found, temp-sensor won't be compiled. Get libmodbus from: https://github.com/stephane/libmodbus")
-endif()
+find_library(GPIOD_LIB gpiod)
+
 
 add_library(temp-sensor temp-sensor.c)
 add_library(relay relay.c)
-add_library(iotctrl SHARED relay temp-sensor)
+add_library(beep beep.c)
+add_library(iotctrl SHARED relay temp-sensor beep)
 
-target_link_libraries(iotctrl modbus)
+target_link_libraries(iotctrl modbus gpiod)
 
-set_target_properties(iotctrl PROPERTIES PUBLIC_HEADER "temp-sensor.h;relay.h;")
+set_target_properties(
+    iotctrl PROPERTIES PUBLIC_HEADER "temp-sensor.h;relay.h;beep.h"
+)
 
 install(TARGETS iotctrl 
         LIBRARY DESTINATION lib
