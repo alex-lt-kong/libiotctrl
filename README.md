@@ -2,12 +2,15 @@
 
 - The repository wraps methods to control the following IoT devices in C and provides language bindings when
   needed:
-  - LCUS-1 relay (`relay.c`/`relay.h`).
+  - LCUS-1 relay (`relay.h`).
     <br />
     <img src="./assets/lcus-1_product-image.jpg" width="180" />
-  - DL11B-MC temprature sensor (`temp-sensor.c`/`temp-sensor.h`).
+  - DL11B-MC temprature sensor (`temp-sensor.h`).
     <br />
     <img src="./assets/dl11b-mc_product-image.jpg" width="180" />
+  - Common high level trigger active buzzers (`buzzer.h`).
+    <br />
+    <img src="./assets/active-buzzer-high-level-trigger_product-image.jpg" width="180" />
 
 ## Device details
 

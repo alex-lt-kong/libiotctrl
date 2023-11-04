@@ -1,4 +1,4 @@
-#include "beep.h"
+#include "buzz.h"
 
 #include <errno.h>
 #include <gpiod.h>
@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int beep(const unsigned int gpiochip_num, const size_t pin_num,
-         const struct beepUnit sequence[], const size_t sequence_len) {
+int make_a_buzz(const unsigned int gpiochip_num, const size_t pin_num,
+                const struct buzz_unit sequence[], const size_t sequence_len) {
 
   struct gpiod_chip *chip;
   struct gpiod_line *line;

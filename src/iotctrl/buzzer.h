@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-struct beepUnit {
+struct buzz_unit {
   int on_off;
   size_t duration_ms;
 };
@@ -13,5 +13,5 @@ struct beepUnit {
  * @param sequence_len Length of the Sequence array
  * @returns 0 means success or an error code will be returned.
  * */
-int beep(const unsigned int gpiochip_num, const size_t pin_num,
-         const struct beepUnit sequence[], const size_t sequence_len);
+int make_a_buzz(const unsigned int gpiochip_num, const size_t pin_num,
+                const struct buzz_unit sequence[], const size_t sequence_len);
