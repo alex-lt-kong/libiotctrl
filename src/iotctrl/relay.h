@@ -10,6 +10,6 @@
  * @returns 0 means success or an error code will be returned.
  * */
 
-int control_relay(const char *relay_path, bool turn_on);
+int iotctrl_control_relay(const char *relay_path, bool turn_on);
 
-#endif /* LIBIOTCTRL_RELAY_H */
+#endif // LIBIOTCTRL_RELAY_H

@@ -25,8 +25,8 @@ uint16_t calculate_crc(const uint8_t *buf, size_t len) {
   return crc;
 }
 
-int16_t get_temperature(const char *sensor_path,
-                        const int enable_debug_output) {
+int16_t iotctrl_get_temperature(const char *sensor_path,
+                                const int enable_debug_output) {
   modbus_t *ctx = NULL;
   int16_t temp = INVALID_TEMP;
   ctx = modbus_new_rtu(sensor_path, 9600, 'N', 8, 1);

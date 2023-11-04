@@ -8,7 +8,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(cmake/compiler-flags.cmake)
 include(cmake/sanitizers.cmake)
 
-include_directories(./src)
-
+include_directories(./src/iotctrl)
 add_subdirectory(src/iotctrl)
-add_subdirectory(tools)
+add_subdirectory(src/tools)

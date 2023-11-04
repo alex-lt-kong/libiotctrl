@@ -1,42 +1,47 @@
 [
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
-  "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/temp-sensor.dir/temp-sensor.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/temp-sensor.c",
-  "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/temp-sensor.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
-  "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/relay.dir/relay.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/relay.c",
-  "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/relay.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
-  "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/beep.dir/beep.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/beep.c",
-  "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/beep.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
-  "command": "/usr/bin/cc -Diotctrl_EXPORTS -I/home/mamsds/bin/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/iotctrl.dir/relay.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/relay.c",
-  "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/relay.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
-  "command": "/usr/bin/cc -Diotctrl_EXPORTS -I/home/mamsds/bin/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/iotctrl.dir/temp-sensor.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/temp-sensor.c",
-  "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/temp-sensor.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
-  "command": "/usr/bin/cc -Diotctrl_EXPORTS -I/home/mamsds/bin/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/iotctrl.dir/beep.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/beep.c",
-  "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/beep.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/tools",
-  "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src -I/home/mamsds/bin/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/temp-sensor-tool.dir/temp-sensor-tool.c.o -c /home/mamsds/bin/libiotctrl/tools/temp-sensor-tool.c",
-  "file": "/home/mamsds/bin/libiotctrl/tools/temp-sensor-tool.c"
-},
-{
-  "directory": "/home/mamsds/bin/libiotctrl/build/tools",
-  "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src -I/home/mamsds/bin/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/relay-tool.dir/relay-tool.c.o -c /home/mamsds/bin/libiotctrl/tools/relay-tool.c",
-  "file": "/home/mamsds/bin/libiotctrl/tools/relay-tool.c"
-}
+  {
+    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/temp-sensor.dir/temp-sensor.c.o -c /root/repos/libiotctrl/src/iotctrl/temp-sensor.c",
+    "file": "/root/repos/libiotctrl/src/iotctrl/temp-sensor.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/relay.dir/relay.c.o -c /root/repos/libiotctrl/src/iotctrl/relay.c",
+    "file": "/root/repos/libiotctrl/src/iotctrl/relay.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/buzzer.dir/buzzer.c.o -c /root/repos/libiotctrl/src/iotctrl/buzzer.c",
+    "file": "/root/repos/libiotctrl/src/iotctrl/buzzer.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc -Diotctrl_EXPORTS -I/root/repos/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/iotctrl.dir/relay.c.o -c /root/repos/libiotctrl/src/iotctrl/relay.c",
+    "file": "/root/repos/libiotctrl/src/iotctrl/relay.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc -Diotctrl_EXPORTS -I/root/repos/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/iotctrl.dir/temp-sensor.c.o -c /root/repos/libiotctrl/src/iotctrl/temp-sensor.c",
+    "file": "/root/repos/libiotctrl/src/iotctrl/temp-sensor.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc -Diotctrl_EXPORTS -I/root/repos/libiotctrl/./src -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/iotctrl.dir/buzzer.c.o -c /root/repos/libiotctrl/src/iotctrl/buzzer.c",
+    "file": "/root/repos/libiotctrl/src/iotctrl/buzzer.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/tools",
+    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/temp-sensor-tool.dir/temp-sensor-tool.c.o -c /root/repos/libiotctrl/tools/temp-sensor-tool.c",
+    "file": "/root/repos/libiotctrl/tools/temp-sensor-tool.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/tools",
+    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/relay-tool.dir/relay-tool.c.o -c /root/repos/libiotctrl/tools/relay-tool.c",
+    "file": "/root/repos/libiotctrl/tools/relay-tool.c"
+  },
+  {
+    "directory": "/root/repos/libiotctrl/build/tools",
+    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -o CMakeFiles/buzzer-tool.dir/buzzer-tool.c.o -c /root/repos/libiotctrl/tools/buzzer-tool.c",
+    "file": "/root/repos/libiotctrl/tools/buzzer-tool.c"
+  }
 ]

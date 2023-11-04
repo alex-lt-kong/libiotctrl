@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int control_relay(const char *relay_path, bool turn_on) {
+int iotctrl_control_relay(const char *relay_path, bool turn_on) {
   FILE *fptr;
 
   if ((fptr = fopen(relay_path, "r"))) {
