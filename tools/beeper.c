@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/file.h>
 #include <unistd.h>
 
 #define LOCK_FILE_PATH "/tmp/beeper.lck"
@@ -22,15 +23,17 @@ int main() {
   ret = flock(fd, LOCK_EX | LOCK_NB);
   if (ret != 0) {
     printf("File already locked\n");
-    return;
+    return -1;
   }
 
   printf("File available, not locked\n");
-  struct timespec sequence[] = {{1, 0}, {1, 0}, {1, 0}, {1, 0}, {1, 0},
-                                {1, 0}, {1, 0}, {1, 0}, {1, 0}};
+  /*struct timespec sequence[] = {{1, 0}, {1, 0}, {1, 0}, {1, 0}, {1, 0},
+                                {1, 0}, {1, 0}, {1, 0}, {1, 0}};*/
+  struct beepUnit sequence[] = {{1, 100}, {0, 100}, {1, 100}, {0, 2000},
+                                {1, 100}, {0, 100}, {1, 100}, {0, 2000}};
   size_t length = sizeof(sequence) / sizeof(sequence[0]);
 
-  beep(4, sequence, length);
+  beep(0, 4, sequence, length);
   flock(fd, LOCK_UN);
   close(fd);
 
