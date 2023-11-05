@@ -1,7 +1,8 @@
 #include "buzzer.h"
 
-#include <errno.h>
 #include <gpiod.h>
+
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
