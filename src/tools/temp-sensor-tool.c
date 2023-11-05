@@ -16,9 +16,8 @@ void print_help_then_exit() {
   _exit(0);
 }
 
-int main(int argc, char **argv) {
-  char *device_path = NULL;
-  bool verbose_mode = false;
+void parse_arguments(int argc, char **argv, char **device_path,
+                     bool *verbose_mode) {
   int c;
   // https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
   while (1) {
@@ -36,42 +35,27 @@ int main(int argc, char **argv) {
     if (c == -1)
       break;
     switch (c) {
-    case 0:
-      /* If this option set a flag, do nothing else now. */
-      if (long_options[option_index].flag != 0)
-        break;
-      printf("option %s", long_options[option_index].name);
-      if (optarg)
-        printf(" with arg %s", optarg);
-      printf("\n");
-      break;
     case 'd':
-      device_path = optarg;
+      *device_path = optarg;
       break;
-    case 'h':
-      print_help_then_exit();
     case 'v':
-      verbose_mode = true;
+      *verbose_mode = true;
       break;
-    case '?':
-      print_help_then_exit();
     default:
       print_help_then_exit();
     }
   }
-  /* Print any remaining command line arguments (not options). */
-  if (optind < argc) {
-    while (optind < argc)
-      printf("%s ", argv[optind++]);
-    putchar('\n');
+  if (*device_path == NULL) {
     print_help_then_exit();
   }
-  if (device_path == NULL) {
-    print_help_then_exit();
-  }
+}
 
+int main(int argc, char **argv) {
+  char *device_path = NULL;
+  bool verbose_mode = false;
+  parse_arguments(argc, argv, &device_path, &verbose_mode);
   int16_t temp_raw = iotctrl_get_temperature(device_path, verbose_mode);
-  if (temp_raw == INVALID_TEMP) {
+  if (temp_raw == IOTCTRL_INVALID_TEMP) {
     fprintf(stderr, "failed to read from sensor.\n");
   } else {
     float temp_parsed = temp_raw / 10.0;

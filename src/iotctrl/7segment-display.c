@@ -3,17 +3,36 @@
 #include <gpiod.h>
 
 #include <errno.h>
+#include <math.h>
 #include <pthread.h>
 #include <signal.h>
+#include <stdatomic.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
+
+// 0 turns a segment on, 1 turns a segment off
+// The highest digit controls the dot
+const uint8_t iotctrl_chars_table[] = {
+    0b11000000, // 0
+    0b11111001, // 1
+    0b10100100, // 2
+    0b10110000, // 3
+    0b10011001, // 4
+    0b10010010, // 5
+    0b10000010, // 6
+    0b11111000, // 7
+    0b10000000, // 8
+    0b10010000, // 9
+    0b11111111, // empty
+    0b10111111  // -
+};
 
 sig_atomic_t ev_flag = 0;
 pthread_t th_display_refresh = 0;
-int values[] = {0, 0};
-uint8_t per_digit_values[16];
+_Atomic uint8_t *per_digit_values = NULL;
+_Atomic uint8_t *per_digit_dots = NULL;
 /*
 const int data = 17;
 const int clk = 11;
@@ -56,19 +75,6 @@ uint8_t handle_dot(uint8_t value, bool turn_it_on) {
   return turn_it_on ? value & 0b01111111 : value;
 }
 
-const uint8_t available_chars[] = {
-    0b11000000, // 0
-    0b11111001, // 1
-    0b10100100, // 2
-    0b10110000, // 3
-    0b10011001, // 4
-    0b10010010, // 5
-    0b10000010, // 6
-    0b11111000, // 7
-    0b10000000, // 8
-    0b10010000, // 9
-    0b11111111  // empty
-};
 void iotctrl_finalize_7seg_display() {
   ev_flag = 1;
   if (th_display_refresh != 0)
@@ -82,20 +88,58 @@ void iotctrl_finalize_7seg_display() {
     gpiod_line_release(line_latch);
   if (chip != NULL)
     gpiod_chip_close(chip);
+
+  free(per_digit_values);
+  free(per_digit_dots);
 }
 
-int iotctrl_update_value(int val1, int val2) {
-  values[0] = val1;
-  values[1] = val2;
-  return 0;
+// CanNOT expose this to users, it creates intermediate states
+void update_value_one_four_digit_float(float val, uint16_t start_idx) {
+  if (val > 1000 || val < -100)
+    val = 0;
+
+  per_digit_dots[start_idx + 2] = 1;
+
+  bool still_zero = true;
+  if (val >= 0) {
+    per_digit_values[start_idx + 0] = (int)fabs(val) % 1000 / 100;
+    if (per_digit_values[start_idx + 0] != 0)
+      still_zero = false;
+    else
+      per_digit_values[start_idx + 0] = 10;
+  } else {
+    per_digit_values[start_idx + 0] = 11;
+  }
+  per_digit_values[start_idx + 1] = (int)fabs(val) % 100 / 10;
+  if (per_digit_values[start_idx + 1] == 0) {
+    if (still_zero)
+      per_digit_values[start_idx + 1] = 10;
+  } else {
+    still_zero = false;
+  }
+  per_digit_values[start_idx + 2] = (int)fabs(val) % 10;
+  per_digit_values[start_idx + 3] = (int)fabs(val * 10) % 10;
 }
 
-int update_display(uint8_t *values, bool *with_dots) {
+void iotctrl_update_value_two_four_digit_floats(float first, float second) {
+  if (first > 1000 || first < -100)
+    first = 0;
+  if (second > 1000 || second < -100)
+    second = 0;
+
+  memset(per_digit_values, 0, digit_count);
+  memset(per_digit_dots, 0, digit_count);
+  update_value_one_four_digit_float(first, 0);
+  update_value_one_four_digit_float(second, 4);
+}
+
+int update_display() {
 
   for (size_t i = 0; i < digit_count; ++i) {
-    write_data_to_register(handle_dot(available_chars[values[i]], with_dots[i])
-                               << 8 |
-                           1 << (digit_count - 1 - i));
+    write_data_to_register(
+        handle_dot(iotctrl_chars_table[per_digit_values[i]], per_digit_dots[i])
+            << 8 |
+        1 << (digit_count - 1 - i));
 
     gpiod_line_set_value(line_latch, 1);
     gpiod_line_set_value(line_latch, 0);
@@ -107,23 +151,10 @@ int update_display(uint8_t *values, bool *with_dots) {
 
 void *ev_display_refresh_thread() {
   while (!ev_flag) {
-    bool dots[8] = {0, 0, 1, 0, 0, 0, 1, 0};
-    while (!ev_flag) {
-      // We need to use an intermediary variable to avoid accessing pl members
-      // multiple times; otherwise we can still trigger race condition
-
-      per_digit_values[0] = values[0] % 1000 / 100;
-      per_digit_values[1] = values[0] % 100 / 10;
-      per_digit_values[2] = values[0] % 10;
-      per_digit_values[3] = values[0] * 10 % 10;
-
-      per_digit_values[4] = values[1] % 1000 / 100;
-      per_digit_values[5] = values[1] % 100 / 10;
-      per_digit_values[6] = values[1] % 10;
-      per_digit_values[7] = values[1] * 10 % 10;
-      update_display(per_digit_values, dots);
-    }
+    update_display();
+    usleep(10);
   }
+  return NULL;
 }
 
 int iotctrl_init_display(const char *gpiochip_path,
@@ -138,6 +169,18 @@ int iotctrl_init_display(const char *gpiochip_path,
   latch = latch_pin_num;
   chain = chain_num;
 
+  per_digit_values = calloc(sizeof(_Atomic(uint8_t)), digit_count);
+  if (per_digit_values == NULL) {
+    perror("calloc()");
+    iotctrl_finalize_7seg_display();
+    return -5;
+  }
+  per_digit_dots = calloc(sizeof(_Atomic(uint8_t)), digit_count);
+  if (per_digit_dots == NULL) {
+    perror("calloc()");
+    iotctrl_finalize_7seg_display();
+    return -5;
+  }
   chip = gpiod_chip_open(gpiochip_path);
 
   if (!chip) {
@@ -154,9 +197,9 @@ int iotctrl_init_display(const char *gpiochip_path,
     return -2;
   }
 
-  if (gpiod_line_request_output(line_data, "gpiod-example", 0) != 0 ||
-      gpiod_line_request_output(line_clk, "gpiod-example", 0) != 0 ||
-      gpiod_line_request_output(line_latch, "gpiod-example", 0) != 0) {
+  if (gpiod_line_request_output(line_data, "7-segment-display", 0) != 0 ||
+      gpiod_line_request_output(line_clk, "7-segment-display", 0) != 0 ||
+      gpiod_line_request_output(line_latch, "7-segment-display", 0) != 0) {
     fprintf(stderr, "gpiod_line_request_output() failed\n");
     iotctrl_finalize_7seg_display();
     return -3;

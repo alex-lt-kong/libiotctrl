@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-#define INVALID_TEMP 0x7FFF
+#define IOTCTRL_INVALID_TEMP 0x7FFF
 // So that the variable will be in the so library file, which can be read by
 // language bindings
-const uint16_t iotctrl_invalid_temp = INVALID_TEMP;
+const uint16_t iotctrl_invalid_temp = IOTCTRL_INVALID_TEMP;
 
 /**
  * @param sensor_path path of the temperature sensor, typically something like

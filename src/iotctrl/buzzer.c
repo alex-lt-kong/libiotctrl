@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int iotctrl_make_a_buzz(const unsigned int gpiochip_num, const size_t pin_num,
+int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t pin_num,
                         const struct buzz_unit sequence[],
                         const size_t sequence_len) {
 
@@ -15,9 +15,9 @@ int iotctrl_make_a_buzz(const unsigned int gpiochip_num, const size_t pin_num,
   struct gpiod_line *line;
   int retval = 0;
 
-  chip = gpiod_chip_open_by_number(gpiochip_num);
+  chip = gpiod_chip_open(gpiochip_path);
   if (!chip) {
-    fprintf(stderr, "gpiod_chip_open_by_number(%u) failed\n", gpiochip_num);
+    fprintf(stderr, "gpiod_chip_open(%u) failed\n", gpiochip_path);
     retval = -1;
     goto err_gpiod_chip_open_by_number;
   }

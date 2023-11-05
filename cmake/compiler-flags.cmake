@@ -11,6 +11,7 @@ add_compile_options("-Wall")
 add_compile_options("-Wextra")
 add_compile_options("-pedantic")
 add_compile_options("-O2")
+# add_compile_options("-Wno-gnu-binary-literal")
 
 #
 # Allow the linker to remove unused data and functions
