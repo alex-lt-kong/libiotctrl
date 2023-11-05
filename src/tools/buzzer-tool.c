@@ -10,8 +10,6 @@
 #include <sys/file.h>
 #include <unistd.h>
 
-#define SIGNAL_PIN 4
-
 void print_help_then_exit(char **argv) {
   // clang-format off
   printf("Usage: %s\n"
@@ -61,10 +59,10 @@ int main(int argc, char **argv) {
   char *gpio_device_path = NULL;
   ssize_t pin_num = -1;
   parse_arguments(argc, argv, &gpio_device_path, &pin_num);
-  struct buzz_unit sequence[] = {{1, 100}, {0, 100}, {1, 100}, {0, 2000},
-                                 {1, 100}, {0, 100}, {0, 2000}};
-  size_t length = sizeof(sequence) / sizeof(sequence[0]);
-  size_t iter_count = 10;
+  const struct iotctrl_buzz_unit sequence[] = {{1, 100}, {0, 100}, {1, 100},
+                                               {0, 100}, {1, 100}, {0, 2000}};
+  const size_t length = sizeof(sequence) / sizeof(sequence[0]);
+  const size_t iter_count = 10;
   printf("Making a test buzz for %lu times...\n", iter_count);
   for (size_t i = 0; i < iter_count; ++i) {
     printf("Iteration %lu\n", i);

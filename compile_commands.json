@@ -1,42 +1,42 @@
 [
   {
-    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/7segment-display.c.o -c /root/repos/libiotctrl/src/iotctrl/7segment-display.c",
-    "file": "/root/repos/libiotctrl/src/iotctrl/7segment-display.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/7segment-display.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/7segment-display.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/7segment-display.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/buzzer.c.o -c /root/repos/libiotctrl/src/iotctrl/buzzer.c",
-    "file": "/root/repos/libiotctrl/src/iotctrl/buzzer.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/buzzer.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/buzzer.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/buzzer.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/temp-sensor.c.o -c /root/repos/libiotctrl/src/iotctrl/temp-sensor.c",
-    "file": "/root/repos/libiotctrl/src/iotctrl/temp-sensor.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/temp-sensor.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/temp-sensor.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/temp-sensor.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/iotctrl",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/relay.c.o -c /root/repos/libiotctrl/src/iotctrl/relay.c",
-    "file": "/root/repos/libiotctrl/src/iotctrl/relay.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/iotctrl",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -fPIC -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/iotctrl.dir/relay.c.o -c /home/mamsds/bin/libiotctrl/src/iotctrl/relay.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/iotctrl/relay.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/tools",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/temp-sensor-tool.dir/temp-sensor-tool.c.o -c /root/repos/libiotctrl/src/tools/temp-sensor-tool.c",
-    "file": "/root/repos/libiotctrl/src/tools/temp-sensor-tool.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/tools",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -I/home/mamsds/bin/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/temp-sensor-tool.dir/temp-sensor-tool.c.o -c /home/mamsds/bin/libiotctrl/src/tools/temp-sensor-tool.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/tools/temp-sensor-tool.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/tools",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/relay-tool.dir/relay-tool.c.o -c /root/repos/libiotctrl/src/tools/relay-tool.c",
-    "file": "/root/repos/libiotctrl/src/tools/relay-tool.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/tools",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -I/home/mamsds/bin/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/relay-tool.dir/relay-tool.c.o -c /home/mamsds/bin/libiotctrl/src/tools/relay-tool.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/tools/relay-tool.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/tools",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/buzzer-tool.dir/buzzer-tool.c.o -c /root/repos/libiotctrl/src/tools/buzzer-tool.c",
-    "file": "/root/repos/libiotctrl/src/tools/buzzer-tool.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/tools",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -I/home/mamsds/bin/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/buzzer-tool.dir/buzzer-tool.c.o -c /home/mamsds/bin/libiotctrl/src/tools/buzzer-tool.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/tools/buzzer-tool.c"
   },
   {
-    "directory": "/root/repos/libiotctrl/build/src/tools",
-    "command": "/usr/bin/cc  -I/root/repos/libiotctrl/./src/iotctrl -I/root/repos/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/7seg-disp-tool.dir/7seg-disp-tool.c.o -c /root/repos/libiotctrl/src/tools/7seg-disp-tool.c",
-    "file": "/root/repos/libiotctrl/src/tools/7seg-disp-tool.c"
+    "directory": "/home/mamsds/bin/libiotctrl/build/src/tools",
+    "command": "/usr/bin/cc  -I/home/mamsds/bin/libiotctrl/./src/iotctrl -I/home/mamsds/bin/libiotctrl/src -Wall -Wextra -pedantic -O2 -fdata-sections -ffunction-sections -fno-common -Wl,--gc-sections -D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fexceptions -fstack-clash-protection -fstack-protector-strong -grecord-gcc-switches -pipe -Werror=format-security -Wno-format-nonliteral -fPIE -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -std=gnu11 -o CMakeFiles/7seg-disp-tool.dir/7seg-disp-tool.c.o -c /home/mamsds/bin/libiotctrl/src/tools/7seg-disp-tool.c",
+    "file": "/home/mamsds/bin/libiotctrl/src/tools/7seg-disp-tool.c"
   }
-]
+  ]

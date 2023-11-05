@@ -51,7 +51,8 @@ void parse_arguments(int argc, char **argv, char **device_path) {
 int main(int argc, char **argv) {
   char *gpio_device_path = NULL;
   parse_arguments(argc, argv, &gpio_device_path);
-  if (iotctrl_init_display(gpio_device_path, 8, 17, 11, 18, 2) != 0)
+  struct iotctrl_7seg_display_connection_info conn = {8, 17, 11, 18, 2};
+  if (iotctrl_init_display(gpio_device_path, conn) != 0)
     return -1;
   iotctrl_update_value_two_four_digit_floats(19, 237.4);
   getchar(); // Unix-based systems

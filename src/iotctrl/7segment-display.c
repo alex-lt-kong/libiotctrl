@@ -158,17 +158,16 @@ void *ev_display_refresh_thread() {
   return NULL;
 }
 
-int iotctrl_init_display(const char *gpiochip_path,
-                         const size_t display_digit_count,
-                         const int data_pin_num, const int clock_pin_num,
-                         const int latch_pin_num, const int chain_num) {
+int iotctrl_init_display(
+    const char *gpiochip_path,
+    const struct iotctrl_7seg_display_connection_info conn) {
 
-  digit_count = display_digit_count;
+  digit_count = conn.display_digit_count;
 
-  data = data_pin_num;
-  clk = clock_pin_num;
-  latch = latch_pin_num;
-  chain = chain_num;
+  data = conn.data_pin_num;
+  clk = conn.clock_pin_num;
+  latch = conn.latch_pin_num;
+  chain = conn.chain_num;
 
   per_digit_values = calloc(sizeof(_Atomic(uint8_t)), digit_count);
   if (per_digit_values == NULL) {

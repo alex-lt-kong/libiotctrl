@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t pin_num,
-                        const struct buzz_unit sequence[],
+int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t signal_pin,
+                        const struct iotctrl_buzz_unit sequence[],
                         const size_t sequence_len) {
 
   struct gpiod_chip *chip;
@@ -23,9 +23,9 @@ int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t pin_num,
     goto err_gpiod_chip_open_by_number;
   }
 
-  line = gpiod_chip_get_line(chip, pin_num);
+  line = gpiod_chip_get_line(chip, signal_pin);
   if (!line) {
-    fprintf(stderr, "gpiod_chip_get_line(%lu) failed\n", pin_num);
+    fprintf(stderr, "gpiod_chip_get_line(%lu) failed\n", signal_pin);
     goto err_gpiod_chip_get_line;
     retval = -2;
   }
@@ -41,7 +41,6 @@ int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t pin_num,
       fprintf(stderr, "gpiod_line_set_value() error: %d\n", errno);
       break;
     }
-    (void)usleep(sequence[i].duration_ms * 1000);
   }
 
 err_gpiod_line_request_output:
