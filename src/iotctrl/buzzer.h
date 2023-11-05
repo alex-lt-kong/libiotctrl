@@ -13,7 +13,9 @@ struct iotctrl_buzz_unit {
  * @param gpiochip_path GPIO device path, typically /dev/gpiochip0
  * @param signal_pin Signal pin (a.k.a., I/O), following the numbering of
  * GPIO/BCM schema
- * @param sequence Sequence of beeps
+ * @param sequence Sequence of beeps. Users should always terminate the sequence
+ * with an off section (i.e., setting on_off to 0); otherwise the buzzer will
+ * keep buzzing
  * @param sequence_len Length of the Sequence array
  * @returns 0 means success or an error code will be returned.
  * */
