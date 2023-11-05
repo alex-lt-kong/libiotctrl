@@ -1,10 +1,12 @@
-#include "iotctrl/temp-sensor.h"
+#include "temp-sensor.h"
 
 #include <modbus/modbus.h>
 
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+const uint16_t iotctrl_invalid_temp = IOTCTRL_INVALID_TEMP;
 
 uint16_t calculate_crc(const uint8_t *buf, size_t len) {
   uint16_t crc = 0xFFFF;
@@ -28,7 +30,7 @@ uint16_t calculate_crc(const uint8_t *buf, size_t len) {
 int16_t iotctrl_get_temperature(const char *sensor_path,
                                 const int enable_debug_output) {
   modbus_t *ctx = NULL;
-  int16_t temp = INVALID_TEMP;
+  int16_t temp = IOTCTRL_INVALID_TEMP;
   ctx = modbus_new_rtu(sensor_path, 9600, 'N', 8, 1);
   if (ctx == NULL) {
     fprintf(stderr, "Unable to create the libmodbus context\n");
@@ -77,11 +79,11 @@ int16_t iotctrl_get_temperature(const char *sensor_path,
 
   if (rsp[0] == 0x01 || rsp[1] == 0x04 || rsp[2] == 0x02) {
     temp = ((rsp[3] << 8) + rsp[4]);
-    if (temp == INVALID_TEMP) {
+    if (temp == IOTCTRL_INVALID_TEMP) {
       fprintf(stderr,
               "Reading is INVALID_TEMP(%d). The sensor might be non-existent "
               "or malfunctional\n",
-              INVALID_TEMP);
+              IOTCTRL_INVALID_TEMP);
     }
     uint16_t calculated_crc = calculate_crc(rsp, 5);
     uint16_t expected_crc = (rsp[6] << 8) + rsp[5];

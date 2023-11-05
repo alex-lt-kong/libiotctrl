@@ -1,4 +1,4 @@
-#include "iotctrl/temp-sensor.h"
+#include <iotctrl/temp-sensor.h>
 
 #include <getopt.h>
 #include <linux/limits.h>

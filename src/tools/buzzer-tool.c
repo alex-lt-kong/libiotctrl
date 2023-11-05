@@ -62,18 +62,17 @@ int main(int argc, char **argv) {
   ssize_t pin_num = -1;
   parse_arguments(argc, argv, &gpio_device_path, &pin_num);
   struct buzz_unit sequence[] = {
-      {1, 100}, {0, 100},  {1, 100}, {0, 2000}, {1, 100}, {0, 100},
-      {1, 100}, {0, 2000}, {1, 100}, {0, 100},  {1, 100}, {0, 2000},
-      {1, 100}, {0, 100},  {1, 100}, {0, 2000}, {1, 100}, {0, 100},
-      {1, 100}, {0, 2000}, {1, 100}, {0, 100},  {1, 100}, {0, 2000},
-      {1, 100}, {0, 100},  {1, 100}, {0, 2000}, {1, 100}, {0, 100},
-      {1, 100}, {0, 2000}, {1, 100}, {0, 100},  {1, 100}, {0, 2000}};
+      {1, 100}, {0, 100},  {1, 100}, {0, 2000}, {1, 100}, {0, 100}, {0, 2000}};
   size_t length = sizeof(sequence) / sizeof(sequence[0]);
-
+  size_t iter_count = 10;
+  printf("Making a test buzz for %u times...\n", iter_count);
+  for (size_t i = 0; i < iter_count; ++i) {
+    printf("Iteration %d\n", i);
   if (iotctrl_make_a_buzz(gpio_device_path, (size_t)pin_num, sequence,
                           length) != 0) {
     fprintf(stderr, "iotctrl_make_a_buzz() failed\n");
-  }
+    break;
+  }}
 
   return 0;
 }

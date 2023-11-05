@@ -1,4 +1,4 @@
-#include "iotctrl/relay.h"
+#include <iotctrl/relay.h>
 
 #include <getopt.h>
 #include <stdio.h>

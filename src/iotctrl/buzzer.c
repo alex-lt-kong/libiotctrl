@@ -17,7 +17,7 @@ int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t pin_num,
 
   chip = gpiod_chip_open(gpiochip_path);
   if (!chip) {
-    fprintf(stderr, "gpiod_chip_open(%u) failed\n", gpiochip_path);
+    fprintf(stderr, "gpiod_chip_open(%s) failed\n", gpiochip_path);
     retval = -1;
     goto err_gpiod_chip_open_by_number;
   }
