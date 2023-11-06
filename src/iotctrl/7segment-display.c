@@ -158,9 +158,8 @@ void *ev_display_refresh_thread() {
   return NULL;
 }
 
-int iotctrl_init_display(
-    const char *gpiochip_path,
-    const struct iotctrl_7seg_display_connection_info conn) {
+int iotctrl_init_display(const char *gpiochip_path,
+                         const struct iotctrl_7seg_display_connection conn) {
 
   digit_count = conn.display_digit_count;
 

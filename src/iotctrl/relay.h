@@ -9,7 +9,6 @@
  * @param turn_on turn the relay on or off
  * @returns 0 means success or an error code will be returned.
  * */
-
 int iotctrl_control_relay(const char *relay_path, bool turn_on);
 
 #endif // LIBIOTCTRL_RELAY_H
