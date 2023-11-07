@@ -7,12 +7,15 @@
 struct iotctrl_7seg_display_connection {
   // Number of digits of the 7-segment display, currently only 8 is supported
   const size_t display_digit_count;
-  // a.k.a. DIO
+  // a.k.a. DIO (data input/output)
   int data_pin_num;
   // a.k.a. SCLK (clock signal)
   int clock_pin_num;
   // a.k.a. RCLK (register clock)
   int latch_pin_num;
+  // represents the number of display modules connected in a daisy-chain
+  // configuration. Currently we use 2 4-digit displays, so this value can only
+  // be 2
   int chain_num;
 };
 
@@ -23,7 +26,8 @@ extern const uint8_t iotctrl_chars_table[];
  * @param gpiochip_path GPIO chip's path, typically something like
  * /dev/gpiochip0
  * @param conn a struct that defines the pin connections/etc of a 7seg display
- * @returns 0 on success or an error code
+ * @returns 0 on success or an error code. libgpio does not guarantee that its
+ * functions set errno code, but many of its functions do set it.
  * */
 int iotctrl_init_display(const char *gpiochip_path,
                          const struct iotctrl_7seg_display_connection conn);

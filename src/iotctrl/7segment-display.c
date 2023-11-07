@@ -180,10 +180,13 @@ int iotctrl_init_display(const char *gpiochip_path,
     iotctrl_finalize_7seg_display();
     return -5;
   }
+  // Per libgpiod's ./lib/core.c Internally it uses fopen()/malloc()/ioctl() and
+  // all of them set errno on error
   chip = gpiod_chip_open(gpiochip_path);
 
   if (!chip) {
-    fprintf(stderr, "gpiod_chip_open(%s) failed\n", gpiochip_path);
+    fprintf(stderr, "gpiod_chip_open(%s) failed: %d(%s)\n", gpiochip_path,
+            errno, strerror(errno));
     return -1;
   }
 
@@ -191,7 +194,8 @@ int iotctrl_init_display(const char *gpiochip_path,
   line_clk = gpiod_chip_get_line(chip, clk);
   line_latch = gpiod_chip_get_line(chip, latch);
   if (line_data == NULL || line_clk == NULL || line_latch == NULL) {
-    fprintf(stderr, "gpiod_chip_get_line() failed\n");
+    fprintf(stderr, "gpiod_chip_get_line() failed %d(%s)\n", errno,
+            strerror(errno));
     iotctrl_finalize_7seg_display();
     return -2;
   }
@@ -212,7 +216,7 @@ int iotctrl_init_display(const char *gpiochip_path,
   }
   if (pthread_create(&th_display_refresh, NULL, ev_display_refresh_thread,
                      NULL) != 0) {
-    fprintf(stderr, "pthread_create() failed: %d", errno);
+    fprintf(stderr, "pthread_create() failed: %d(%s)", errno, strerror(errno));
     iotctrl_finalize_7seg_display();
     return -4;
   }
