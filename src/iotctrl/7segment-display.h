@@ -6,7 +6,7 @@
 
 struct iotctrl_7seg_display_connection {
   // Number of digits of the 7-segment display, currently only 8 is supported
-  const size_t display_digit_count;
+  size_t display_digit_count;
   // a.k.a. DIO (data input/output)
   int data_pin_num;
   // a.k.a. SCLK (clock signal)

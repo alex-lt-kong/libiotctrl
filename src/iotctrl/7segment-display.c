@@ -34,12 +34,7 @@ sig_atomic_t volatile iotctrl_ev_flag = 0;
 pthread_t th_display_refresh = 0;
 _Atomic uint8_t *per_digit_values = NULL;
 _Atomic uint8_t *per_digit_dots = NULL;
-/*
-const int data = 17;
-const int clk = 11;
-const int latch = 18;
-const int chain = 2;
-*/
+
 size_t digit_count = 8;
 
 int data;
@@ -76,7 +71,7 @@ uint8_t handle_dot(uint8_t value, bool turn_it_on) {
   return turn_it_on ? value & 0b01111111 : value;
 }
 
-void iotctrl_finalize_7seg_display() {
+void iotctrl_finalize_7seg_display(void) {
   iotctrl_ev_flag = 1;
   if (th_display_refresh != 0)
     (void)pthread_join(th_display_refresh, NULL);
@@ -150,7 +145,7 @@ int update_display() {
   return 0;
 }
 
-void *ev_display_refresh_thread() {
+void *ev_display_refresh_thread(void) {
   while (!iotctrl_ev_flag) {
     update_display();
     usleep(10);
@@ -180,8 +175,10 @@ int iotctrl_init_display(const char *gpiochip_path,
     iotctrl_finalize_7seg_display();
     return -5;
   }
-  // Per libgpiod's ./lib/core.c Internally it uses fopen()/malloc()/ioctl() and
-  // all of them set errno on error
+  // Per
+  // https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/lib/chip.c
+  // Internally it uses fopen()/malloc()/ioctl() and all of them set errno on
+  // error
   chip = gpiod_chip_open(gpiochip_path);
 
   if (!chip) {

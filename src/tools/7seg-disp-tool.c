@@ -53,7 +53,11 @@ void parse_arguments(int argc, char **argv, char **device_path) {
 int main(int argc, char **argv) {
   char *gpio_device_path = NULL;
   parse_arguments(argc, argv, &gpio_device_path);
-  struct iotctrl_7seg_display_connection conn = {8, 17, 11, 18, 2};
+  struct iotctrl_7seg_display_connection conn = {.display_digit_count = 8,
+                                                 .data_pin_num = 17,
+                                                 .clock_pin_num = 11,
+                                                 .latch_pin_num = 18,
+                                                 .chain_num = 2};
   if (iotctrl_init_display(gpio_device_path, conn) != 0) {
     fprintf(stderr, "iotctrl_init_display() failed: %d(%s)\n", errno,
             strerror(errno));
