@@ -57,19 +57,10 @@ node-gyp build
 
 ### Python binding
 
-- Python binding is provided for both temp-sensor and relay.
+- Build and install `libiotctrl.so` according to
+  [Build and install](#build-and-install)
 
-- Dependency:
-
-  - Python 3.9
-  - Built `libiotctrl.so` according to [Build and install](#build-and-install)
-
-- Build
-
-```
-cd ./src/bindings/python
-python3 ./iotctrl.py
-```
+- `temp-sensor-tool.py` can be used to test the functionality of the binding.
 
 ## Device details
 
