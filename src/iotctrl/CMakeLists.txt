@@ -4,10 +4,10 @@ find_library(MODBUS_LIB modbus)
 find_library(GPIOD_LIB gpiod)
 
 
-add_library(iotctrl 7segment-display.c buzzer.c temp-sensor.c relay.c)
+add_library(iotctrl SHARED 7segment-display.c buzzer.c temp-sensor.c relay.c)
 
 
-target_link_libraries(iotctrl)
+target_link_libraries(iotctrl gpiod modbus)
 
 set_target_properties(
     iotctrl

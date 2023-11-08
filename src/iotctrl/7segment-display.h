@@ -19,8 +19,6 @@ struct iotctrl_7seg_display_connection {
   int chain_num;
 };
 
-extern const uint8_t iotctrl_chars_table[];
-
 /**
  * @brief Initialize a 7seg display
  * @param gpiochip_path GPIO chip's path, typically something like

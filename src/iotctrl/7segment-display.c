@@ -14,7 +14,7 @@
 
 // 0 turns a segment on, 1 turns a segment off
 // The highest digit controls the dot
-const uint8_t iotctrl_chars_table[] = {
+static const uint8_t chars_table[] = {
     0b11000000, // 0
     0b11111001, // 1
     0b10100100, // 2
@@ -133,8 +133,7 @@ static int update_display() {
 
   for (size_t i = 0; i < digit_count; ++i) {
     write_data_to_register(
-        handle_dot(iotctrl_chars_table[per_digit_values[i]], per_digit_dots[i])
-            << 8 |
+        handle_dot(chars_table[per_digit_values[i]], per_digit_dots[i]) << 8 |
         1 << (digit_count - 1 - i));
 
     gpiod_line_set_value(line_latch, 1);
