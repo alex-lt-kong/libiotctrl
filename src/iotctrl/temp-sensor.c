@@ -8,7 +8,7 @@
 
 const uint16_t iotctrl_invalid_temp = IOTCTRL_INVALID_TEMP;
 
-uint16_t calculate_crc(const uint8_t *buf, size_t len) {
+static uint16_t calculate_crc(const uint8_t *buf, size_t len) {
   uint16_t crc = 0xFFFF;
 
   for (size_t pos = 0; pos < len; pos++) {

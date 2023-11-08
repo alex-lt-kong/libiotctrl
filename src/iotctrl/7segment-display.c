@@ -30,49 +30,49 @@ const uint8_t iotctrl_chars_table[] = {
 };
 
 // TODO: possible makin iotctrl_ev_flag private?
-sig_atomic_t volatile iotctrl_ev_flag = 0;
-pthread_t th_display_refresh = 0;
-_Atomic uint8_t *per_digit_values = NULL;
-_Atomic uint8_t *per_digit_dots = NULL;
+static sig_atomic_t volatile ev_flag = 0;
+static pthread_t th_display_refresh = 0;
+static _Atomic uint8_t *per_digit_values = NULL;
+static _Atomic uint8_t *per_digit_dots = NULL;
 
-size_t digit_count = 8;
+static size_t digit_count = 8;
 
-int data;
-int clk;
-int latch;
-int chain;
+static int data;
+static int clk;
+static int latch;
+static int chain;
 
-struct gpiod_chip *chip = NULL;
-struct gpiod_line *line_data = NULL;
-struct gpiod_line *line_clk = NULL;
-struct gpiod_line *line_latch = NULL;
+static struct gpiod_chip *chip = NULL;
+static struct gpiod_line *line_data = NULL;
+static struct gpiod_line *line_clk = NULL;
+static struct gpiod_line *line_latch = NULL;
 
-void push_bit(bool bit) {
+static void push_bit(bool bit) {
   gpiod_line_set_value(line_clk, 0);
   gpiod_line_set_value(line_data, bit);
   gpiod_line_set_value(line_clk, 1);
 }
 
-bool get_bit(uint16_t value, int n) {
+static bool get_bit(uint16_t value, int n) {
   if (value & (1 << n)) {
     return true;
   } else {
     return false;
   }
 }
-void write_data_to_register(uint16_t value) {
+static void write_data_to_register(uint16_t value) {
 
   for (int i = 8 * chain - 1; i >= 0; --i) {
     push_bit(get_bit(value, i));
   }
 }
 
-uint8_t handle_dot(uint8_t value, bool turn_it_on) {
+static uint8_t handle_dot(uint8_t value, bool turn_it_on) {
   return turn_it_on ? value & 0b01111111 : value;
 }
 
 void iotctrl_finalize_7seg_display(void) {
-  iotctrl_ev_flag = 1;
+  ev_flag = 1;
   if (th_display_refresh != 0)
     (void)pthread_join(th_display_refresh, NULL);
 
@@ -90,7 +90,7 @@ void iotctrl_finalize_7seg_display(void) {
 }
 
 // CanNOT expose this to users, it creates intermediate states
-void update_value_one_four_digit_float(float val, uint16_t start_idx) {
+static void update_value_one_four_digit_float(float val, uint16_t start_idx) {
   if (val > 1000 || val < -100)
     val = 0;
 
@@ -129,7 +129,7 @@ void iotctrl_update_value_two_four_digit_floats(float first, float second) {
   update_value_one_four_digit_float(second, 4);
 }
 
-int update_display() {
+static int update_display() {
 
   for (size_t i = 0; i < digit_count; ++i) {
     write_data_to_register(
@@ -145,8 +145,8 @@ int update_display() {
   return 0;
 }
 
-void *ev_display_refresh_thread(void) {
-  while (!iotctrl_ev_flag) {
+static void *ev_display_refresh_thread(void) {
+  while (!ev_flag) {
     update_display();
     usleep(10);
   }
