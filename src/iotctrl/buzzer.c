@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t signal_pin,
                         const struct iotctrl_buzz_unit sequence[],
@@ -41,6 +42,7 @@ int iotctrl_make_a_buzz(const char *gpiochip_path, const size_t signal_pin,
       fprintf(stderr, "gpiod_line_set_value() error: %d\n", errno);
       break;
     }
+    usleep(sequence[i].duration_ms * 1000);
   }
 
 err_gpiod_line_request_output:

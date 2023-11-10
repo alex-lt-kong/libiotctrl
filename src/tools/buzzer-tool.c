@@ -63,9 +63,9 @@ int main(int argc, char **argv) {
                                                {0, 100}, {1, 100}, {0, 2000}};
   const size_t length = sizeof(sequence) / sizeof(sequence[0]);
   const size_t iter_count = 10;
-  printf("Making a test buzz for %lu times...\n", iter_count);
+  printf("Making a test buzz for %zu times using pin %d...\n", iter_count, pin_num);
   for (size_t i = 0; i < iter_count; ++i) {
-    printf("Iteration %lu\n", i);
+    printf("Iteration %zu\n", i);
     if (iotctrl_make_a_buzz(gpio_device_path, (size_t)pin_num, sequence,
                             length) != 0) {
       fprintf(stderr, "iotctrl_make_a_buzz() failed\n");
