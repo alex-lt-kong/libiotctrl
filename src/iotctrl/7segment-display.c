@@ -144,7 +144,8 @@ static int update_display() {
   return 0;
 }
 
-static void *ev_display_refresh_thread(void) {
+static void *ev_display_refresh_thread(void *_) {
+  (void)_;
   while (!ev_flag) {
     update_display();
     usleep(10);
