@@ -8,7 +8,9 @@
 
 const uint16_t iotctrl_invalid_temp = IOTCTRL_INVALID_TEMP;
 
-static uint16_t calculate_crc(const uint8_t *buf, size_t len) {
+// This function can also be found at page 21 of
+// https://github.com/alex-lt-kong/libiotctrl/blob/main/assets/dl11-mc_manual.pdf
+static uint16_t calculate_crc16(const uint8_t *buf, size_t len) {
   uint16_t crc = 0xFFFF;
 
   for (size_t pos = 0; pos < len; pos++) {
@@ -27,23 +29,25 @@ static uint16_t calculate_crc(const uint8_t *buf, size_t len) {
   return crc;
 }
 
-int16_t iotctrl_get_temperature(const char *sensor_path,
-                                const int enable_debug_output) {
-  modbus_t *ctx = NULL;
-  int16_t temp = IOTCTRL_INVALID_TEMP;
-  ctx = modbus_new_rtu(sensor_path, 9600, 'N', 8, 1);
-  if (ctx == NULL) {
+int iotctrl_get_temperature(const char *sensor_path, uint8_t sensor_count,
+                            int16_t *readings, const int enable_debug_output) {
+  int ret = 0;
+  modbus_t *mb_ctx = NULL;
+  mb_ctx = modbus_new_rtu(sensor_path, 9600, 'N', 8, 1);
+  if (mb_ctx == NULL) {
     fprintf(stderr, "Unable to create the libmodbus context\n");
+    ret = -1;
     goto finally;
   }
 
-  modbus_set_slave(ctx, 1);
-  modbus_set_debug(ctx, enable_debug_output == 1);
-  if (modbus_connect(ctx) == -1) {
+  modbus_set_slave(mb_ctx, 1);
+  modbus_set_debug(mb_ctx, enable_debug_output == 1);
+  if (modbus_connect(mb_ctx) == -1) {
     fprintf(stderr, "Connection failed: %s\n", modbus_strerror(errno));
+    ret = -2;
     goto finally;
   }
-  uint8_t raw_req[] = {0x01, 0x04, 0x04, 0x00, 0x00, 0x01};
+  uint8_t raw_req[] = {0x01, 0x04, 0x04, 0x00, 0x00, sensor_count};
   // clang-format off
   // Note that we have to truncate the bytes series from 8 to 6 to make it work.
   // Page 12 of the manufacturer manual documents the format of command bytes format:
@@ -57,15 +61,17 @@ int16_t iotctrl_get_temperature(const char *sensor_path,
   uint8_t rsp[MODBUS_RTU_MAX_ADU_LENGTH];
 
   int req_length = modbus_send_raw_request(
-      ctx, raw_req, sizeof(raw_req) / sizeof(raw_req[0]));
+      mb_ctx, raw_req, sizeof(raw_req) / sizeof(raw_req[0]));
   if (req_length == -1) {
     fprintf(stderr, "Failed to send raw request: %s\n", modbus_strerror(errno));
+    ret = -3;
     goto finally;
   }
-  int rc = modbus_receive_confirmation(ctx, rsp);
+  int rc = modbus_receive_confirmation(mb_ctx, rsp);
   if (rc == -1) {
     fprintf(stderr, "Failed to receive a confirmation request: %s\n",
             modbus_strerror(errno));
+    ret = -4;
     goto finally;
   }
   // clang-format off
@@ -78,19 +84,27 @@ int16_t iotctrl_get_temperature(const char *sensor_path,
   // clang-format on
 
   if (rsp[0] == 0x01 || rsp[1] == 0x04 || rsp[2] == 0x02) {
-    temp = ((rsp[3] << 8) + rsp[4]);
-    if (temp == IOTCTRL_INVALID_TEMP) {
-      fprintf(stderr,
-              "Reading is INVALID_TEMP(%d). The sensor might be non-existent "
-              "or malfunctional\n",
-              IOTCTRL_INVALID_TEMP);
-    }
-    uint16_t calculated_crc = calculate_crc(rsp, 5);
-    uint16_t expected_crc = (rsp[6] << 8) + rsp[5];
-    if (calculated_crc != expected_crc) {
-      fprintf(stderr, "CRC value does not match!\n");
+    for (uint8_t i = 0; i < sensor_count; ++i) {
+      readings[i] = ((rsp[3 + i * 2] << 8) + rsp[4 + i * 2]);
+      if (readings[i] == IOTCTRL_INVALID_TEMP) {
+        fprintf(stderr,
+                "Sensor no. %u (index from 0) returns is INVALID_TEMP(%d). The "
+                "sensor might be non-existent or malfunctional\n",
+                i + 1, IOTCTRL_INVALID_TEMP);
+        ret = -5;
+        goto finally;
+      }
+      uint16_t calculated_crc = calculate_crc16(rsp, 3 + sensor_count * 2);
+      uint16_t expected_crc =
+          (rsp[4 + sensor_count * 2] << 8) + rsp[3 + sensor_count * 2];
+      if (calculated_crc != expected_crc) {
+        fprintf(stderr, "CRC value does not match!\n");
+        ret = -6;
+        goto finally;
+      }
     }
   } else {
+    ret = -7;
     fprintf(stderr,
             "Invalid response header, expecting 0x01, 0x04, 0x02, but gets "
             "%#04x, %#04x, %#04x\n",
@@ -98,12 +112,12 @@ int16_t iotctrl_get_temperature(const char *sensor_path,
   }
 
 finally:
-  if (ctx != NULL) {
+  if (mb_ctx != NULL) {
     // Can close after checking modbus_connect(ctx) == -1 again:
     // an established connection could not be established one more time, causing
     // the test to fail and left the context open.
-    modbus_close(ctx);
-    modbus_free(ctx);
+    modbus_close(mb_ctx);
+    modbus_free(mb_ctx);
   }
-  return temp;
+  return ret;
 }
