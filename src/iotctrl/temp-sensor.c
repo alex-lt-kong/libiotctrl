@@ -74,7 +74,7 @@ int iotctrl_get_temperature(const char *sensor_path, uint8_t sensor_count,
     ret = -3;
     goto finally;
   }
-  if (modbus_receive_confirmation(mb_ctx, rsp) != 0) {
+  if (modbus_receive_confirmation(mb_ctx, rsp) == -1) {
     fprintf(stderr, "modbus_receive_confirmation() failed: %s\n",
             modbus_strerror(errno));
     ret = -4;
