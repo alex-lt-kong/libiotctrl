@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
   conn.clock_pin_num = 11;
   conn.latch_pin_num = 18;
   conn.chain_num = chain_count;
-  conn.refresh_rate_hz = 500;
+  conn.refresh_rate_hz = 1000;
   strcpy(conn.gpiochip_path, gpio_device_path);
 
   printf("Parameters:\n");
