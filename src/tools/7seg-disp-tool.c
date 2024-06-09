@@ -57,33 +57,40 @@ void parse_arguments(int argc, char **argv, char **device_path,
 }
 
 int main(int argc, char **argv) {
-  char *gpio_device_path = NULL;
   ssize_t data_pin = -1;
+  char *gpio_device_path = NULL;
+  struct iotctrl_7seg_disp_connection conn;
   parse_arguments(argc, argv, &gpio_device_path, &data_pin);
-  struct iotctrl_7seg_display_connection conn = {.display_digit_count = 8,
-                                                 .data_pin_num = data_pin,
-                                                 .clock_pin_num = 11,
-                                                 .latch_pin_num = 18,
-                                                 .chain_num = 2};
-  if (iotctrl_init_display(gpio_device_path, conn) != 0) {
-    fprintf(stderr, "iotctrl_init_display() failed: %d(%s)\n", errno,
+  conn.display_digit_count = 8;
+  conn.data_pin_num = data_pin;
+  conn.clock_pin_num = 11;
+  conn.latch_pin_num = 18;
+  conn.chain_num = 2;
+  strcpy(conn.gpiochip_path, gpio_device_path);
+  printf("Parameters:\n");
+  printf("display_digit_count: %zu\n", conn.display_digit_count);
+  printf("data_pin_num: %d\n", conn.data_pin_num);
+  printf("clock_pin_num: %d\n", conn.clock_pin_num);
+  printf("latch_pin_num: %d\n", conn.latch_pin_num);
+  printf("chain_num: %d\n", conn.chain_num);
+  printf("gpiochip_path: %s\n", conn.gpiochip_path);
+  struct iotctrl_7seg_disp_handle *handle;
+
+  if ((handle = iotctrl_7seg_disp_init(conn)) == NULL) {
+    fprintf(stderr, "iotctrl_7seg_disp_init() failed: %d(%s)\n", errno,
             strerror(errno));
     return -1;
   }
-  const float values[][2] = {{19, 237.4}, {-145, 9},       {901, -0},
-                             {-3.2, 68},  {-99.99, 3.141}, {-73.9, 734},
-                             {-0.1, 0.6}, {99.8, -1234}};
+  const float values[][2] = {{19, 237.4},  {-145, 9},       {901, -0},
+                             {-3.2, 68},   {-99.99, 3.141}, {-9999.99, 3.141},
+                             {-73.9, 734}, {-0.1, 0.6},     {99.8, -1234}};
   const size_t len = sizeof(values) / sizeof(values[0]);
   for (size_t i = 0; i < len; ++i) {
-    float val0 = values[i][0];
-    val0 = val0 > 999.9 ? 0 : val0;
-    val0 = val0 < -99.9 ? 0 : val0;
-    float val1 = values[i][1];
-    val1 = val1 > 999.9 ? 0 : val1;
-    val1 = val1 < -99.9 ? 0 : val1;
-    printf("Now showing: %f\t%f\n", val0, val1);
-    iotctrl_update_value_two_four_digit_floats(val0, val1);
+    printf("Now showing: %f\t%f", values[i][0], values[i][1]);
+    iotctrl_7seg_disp_update_2floats(*handle, values[i][0], values[i][1]);
     getchar();
   }
+  printf("Done\n");
+  iotctrl_7seg_disp_destory(handle);
   return 0;
 }
