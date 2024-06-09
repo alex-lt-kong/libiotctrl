@@ -45,7 +45,6 @@ bool get_bit(uint16_t value, int n) {
 
 void write_data_to_register(struct iotctrl_7seg_disp_handle handle,
                             uint16_t value) {
-
   for (int i = 8 * handle.chain - 1; i >= 0; --i) {
     push_bit(handle, get_bit(value, i));
   }
@@ -74,6 +73,13 @@ void iotctrl_7seg_disp_destory(struct iotctrl_7seg_disp_handle *handle) {
 }
 
 // CanNOT expose this to users, it creates intermediate states
+/**
+ * @brief The 8-digit digital tube is considered two four-digit fixed point
+ * float with one decimal place
+ * @param handle The handle used to manipulate the corresponding display
+ * @param val Value to be displayed
+ * @param start_idx The index of the first digit of one four-digit float
+ */
 void update_value_one_four_digit_float(struct iotctrl_7seg_disp_handle handle,
                                        float val, uint16_t start_idx) {
   if (val > 1000 || val < -100)
@@ -102,44 +108,62 @@ void update_value_one_four_digit_float(struct iotctrl_7seg_disp_handle handle,
   handle.per_digit_values[start_idx + 3] = (int)fabs(val * 10) % 10;
 }
 
-void iotctrl_7seg_disp_update_2floats(struct iotctrl_7seg_disp_handle h,
-                                      float first, float second) {
-  if (first > 1000 || first < -100) {
-    fprintf(stderr, "first float (%f) out of range, reset to 0\n", first);
-    first = 0;
+void iotctrl_7seg_disp_update_as_four_digit_float(
+    struct iotctrl_7seg_disp_handle h, float val, int float_idx) {
+  if (val > 1000 || val < -100) {
+    fprintf(stderr, "float (%f) out of range, reset to 0\n", val);
+    val = 0;
   }
-  if (second > 1000 || second < -100) {
-    fprintf(stderr, "second float (%f) out of range, reset to 0\n", second);
-    second = 0;
-  }
+  int idx = float_idx * 4;
+  h.per_digit_dots[idx + 2] = 1;
 
-  memset(h.per_digit_values, 0, h.digit_count);
-  memset(h.per_digit_dots, 0, h.digit_count);
-  update_value_one_four_digit_float(h, first, 0);
-  update_value_one_four_digit_float(h, second, 4);
+  bool still_zero = true;
+  if (val >= 0) {
+    h.per_digit_values[idx + 0] = (int)fabs(val) % 1000 / 100;
+    if (h.per_digit_values[idx + 0] != 0)
+      still_zero = false;
+    else
+      h.per_digit_values[idx + 0] = 10;
+  } else {
+    h.per_digit_values[idx + 0] = 11;
+  }
+  h.per_digit_values[idx + 1] = (int)fabs(val) % 100 / 10;
+  if (h.per_digit_values[idx + 1] == 0) {
+    if (still_zero)
+      h.per_digit_values[idx + 1] = 10;
+  } else {
+    still_zero = false;
+  }
+  h.per_digit_values[idx + 2] = (int)fabs(val) % 10;
+  h.per_digit_values[idx + 3] = (int)fabs(val * 10) % 10;
+  /*
+    memset(h.per_digit_values, 0, h.digit_count);
+    memset(h.per_digit_dots, 0, h.digit_count);
+    update_value_one_four_digit_float(h, first, 0);
+    update_value_one_four_digit_float(h, second, 4);*/
 }
 
-static int update_display(struct iotctrl_7seg_disp_handle h) {
+int update_display(struct iotctrl_7seg_disp_handle *h) {
 
-  for (size_t i = 0; i < h.digit_count; ++i) {
+  for (size_t i = 0; i < h->digit_count; ++i) {
     write_data_to_register(
-        h, handle_dot(chars_table[h.per_digit_values[i]], h.per_digit_dots[i])
-                   << 8 |
-               1 << (h.digit_count - 1 - i));
+        *h,
+        handle_dot(chars_table[h->per_digit_values[i]], h->per_digit_dots[i])
+                << 8 |
+            1 << (h->digit_count - 1 - i));
 
-    gpiod_line_set_value(h.line_latch, 1);
-    gpiod_line_set_value(h.line_latch, 0);
-    usleep(20);
+    gpiod_line_set_value(h->line_latch, 1);
+    gpiod_line_set_value(h->line_latch, 0);
+    usleep(h->refresh_delay_us);
   }
 
   return 0;
 }
 
-static void *ev_display_refresh_thread(void *ctx) {
+void *ev_display_refresh_thread(void *ctx) {
   struct iotctrl_7seg_disp_handle *h = (struct iotctrl_7seg_disp_handle *)ctx;
   while (!h->ev_flag) {
-    update_display(*h);
-    usleep(10);
+    update_display(h);
   }
   return NULL;
 }
@@ -161,6 +185,9 @@ iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
   h->chain = conn.chain_num;
 
   h->per_digit_values = calloc(sizeof(_Atomic(uint8_t)), h->digit_count);
+
+  h->refresh_delay_us = 1000 * 1000 / conn.refresh_rate_hz;
+
   if (h->per_digit_values == NULL) {
     perror("calloc()");
     iotctrl_7seg_disp_destory(h);

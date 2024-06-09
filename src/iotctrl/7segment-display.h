@@ -11,16 +11,22 @@ struct iotctrl_7seg_disp_connection {
   // Number of digits of the 7-segment display, currently only 8 is supported
   size_t display_digit_count;
   // a.k.a. DIO (data input/output)
-  int data_pin_num;
+  uint8_t data_pin_num;
   // a.k.a. SCLK (clock signal)
-  int clock_pin_num;
+  uint8_t clock_pin_num;
   // a.k.a. RCLK (register clock)
-  int latch_pin_num;
+  uint8_t latch_pin_num;
   // represents the number of display modules connected in a daisy-chain
   // configuration. Currently we use 2 4-digit displays, so this value can only
   // be 2
-  int chain_num;
+  uint8_t chain_num;
   char gpiochip_path[PATH_MAX + 1];
+  // How frequent is single digit being refreshed.
+  // This parameter is highly hardware-dependent and one may need to take a
+  // trial-and-error approach to ascertain the balance between minimal flashing
+  // display and CPU use. A good starting point is 1KHz then plus/minus by a
+  // factor of 2
+  uint16_t refresh_rate_hz;
 };
 
 struct iotctrl_7seg_disp_handle {
@@ -40,6 +46,8 @@ struct iotctrl_7seg_disp_handle {
   struct gpiod_line *line_data;
   struct gpiod_line *line_clk;
   struct gpiod_line *line_latch;
+
+  uint32_t refresh_delay_us;
 };
 
 /**
@@ -55,14 +63,16 @@ struct iotctrl_7seg_disp_handle *
 iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn);
 
 /**
- * @brief A convenient wrapper to print two floats with one decimal place to the
- * 7-seg displsy. The valid range is [-99.9, 999.9]. Invalid input will be reset
- * to 0.0
- * @param first first float
- * @param second second float
+ * @brief The 7-segment display's digits are grouped as four-digit fixed-point
+ * float with one decimal place. This function is a convenient way to update the
+ * display with such float input.
+ * @param val The float object to be shown. Its valid range is [-99.9, 999.9].
+ * Invalid input will be reset to 0.0
+ * @param float_idx The zero-index pointer denoting which float is to be
+ * updated. For a 8-digit digital tube, float_idx can be either 0 or 1.
  * */
-void iotctrl_7seg_disp_update_2floats(struct iotctrl_7seg_disp_handle handle,
-                                      float first, float second);
+void iotctrl_7seg_disp_update_as_four_digit_float(
+    struct iotctrl_7seg_disp_handle h, float val, int float_idx);
 
 /**
  * @brief Release GPIO resources and internal thread after the 7seg display is
