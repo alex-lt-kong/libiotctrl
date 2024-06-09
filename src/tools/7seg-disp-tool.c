@@ -57,20 +57,20 @@ void print_help_then_exit(char **argv) {
 }
 
 void parse_arguments(int argc, char **argv, char **device_path,
-                     ssize_t *data_pin, ssize_t *digit_count) {
+                     ssize_t *data_pin, ssize_t *chain_count) {
   int c;
   // https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
   while (1) {
     static struct option long_options[] = {
         {"device-path", required_argument, 0, 'p'},
         {"data-pin", required_argument, 0, 'd'},
-        {"digit-count", required_argument, 0, 'n'},
+        {"chain-count", required_argument, 0, 'c'},
         {"help", no_argument, 0, 'h'},
         {NULL, 0, NULL, 0}};
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    c = getopt_long(argc, argv, "p:d:n:h", long_options, &option_index);
+    c = getopt_long(argc, argv, "p:d:c:h", long_options, &option_index);
 
     /* Detect the end of the options. */
     if (c == -1)
@@ -82,8 +82,8 @@ void parse_arguments(int argc, char **argv, char **device_path,
     case 'd':
       *data_pin = atoi(optarg);
       break;
-    case 'n':
-      *digit_count = atoi(optarg);
+    case 'c':
+      *chain_count = atoi(optarg);
       break;
     case 'h':
       print_help_then_exit(argv);
@@ -92,31 +92,29 @@ void parse_arguments(int argc, char **argv, char **device_path,
       print_help_then_exit(argv);
     }
   }
-  if (*device_path == NULL || *data_pin <= 0) {
+  if (*device_path == NULL || *data_pin <= 0 || *chain_count < 0) {
     print_help_then_exit(argv);
   }
 }
 
 int main(int argc, char **argv) {
   int retval = 0;
-  ssize_t data_pin = -1, digit_count = -1;
+  ssize_t data_pin = -1, chain_count = -1;
   char *gpio_device_path = NULL;
   if (install_signal_handler() != 0) {
     retval = -1;
     goto err_signal_handler_install;
   }
   struct iotctrl_7seg_disp_connection conn;
-  parse_arguments(argc, argv, &gpio_device_path, &data_pin, &digit_count);
-  conn.display_digit_count = digit_count;
+  parse_arguments(argc, argv, &gpio_device_path, &data_pin, &chain_count);
   conn.data_pin_num = data_pin;
   conn.clock_pin_num = 11;
   conn.latch_pin_num = 18;
-  conn.chain_num = 2;
-  conn.refresh_rate_hz = 40 * 1000;
+  conn.chain_num = chain_count;
+  conn.refresh_rate_hz = 500;
   strcpy(conn.gpiochip_path, gpio_device_path);
 
   printf("Parameters:\n");
-  printf("display_digit_count: %zu\n", conn.display_digit_count);
   printf("data_pin_num: %d\n", conn.data_pin_num);
   printf("clock_pin_num: %d\n", conn.clock_pin_num);
   printf("latch_pin_num: %d\n", conn.latch_pin_num);
@@ -130,24 +128,31 @@ int main(int argc, char **argv) {
             strerror(errno));
     return -1;
   }
-  const float values[][2] = {{-99.9, -99.9}, {-88.8, -88.8}, {-77.7, -77.7},
-                             {-66.6, -66.6}, {-55.5, -55.5}, {-44.4, -44.4},
-                             {-33.3, -33.3}, {-22.2, -22.2}, {-11.1, -11.1},
-                             {111.1, 111.1}, {222.2, 222.2}, {333.3, 333.3},
-                             {444.4, 444.4}, {555.5, 555.5}, {666.6, 666.6},
-                             {777.7, 777.7}, {888.8, 888.8}, {999.9, 999.9}};
+  const float values[][2] = {
+      {-99.9, -99.9}, {-8.8, -8.8},   {-0.7, -0.7}, {-6.6, -6.6},
+      {-55.5, -55.5}, {-4.4, -4.4},   {-0.3, -0.3}, {-2.2, -2.2},
+      {-11.1, -11.1}, {0, 0},         {0.1, 0.1},   {2.2, 2.2},
+      {33.3, 33.3},   {444.4, 444.4}, {55.5, 55.5}, {6.6, 6.6},
+      {0.7, 0.7},     {8.8, 8.8},     {99.9, 99.9}};
   const size_t len = sizeof(values) / sizeof(values[0]);
+
   while (!ev_flag) {
+    for (uint8_t i = 0; i < handle->digit_count && !ev_flag; ++i) {
+      iotctrl_7seg_disp_update_digit(
+          handle, i,
+          iotctrl_7seg_disp_chars_table[IOTCTRL_7SEG_DISP_CHARS_ALL]);
+    }
+    sleep(1);
     for (size_t i = 0; i < len && !ev_flag; ++i) {
-      if (digit_count == 8) {
+      if (chain_count == 2) {
         printf("Now showing: %.1f, %.1f\n", values[i][0], values[i][1]);
-        iotctrl_7seg_disp_update_as_four_digit_float(*handle, values[i][0], 0);
-        iotctrl_7seg_disp_update_as_four_digit_float(*handle, values[i][1], 1);
+        iotctrl_7seg_disp_update_as_four_digit_float(handle, values[i][0], 0);
+        iotctrl_7seg_disp_update_as_four_digit_float(handle, values[i][1], 1);
       } else {
         printf("Now showing: %.1f\n", values[i][0]);
-        iotctrl_7seg_disp_update_as_four_digit_float(*handle, values[i][0], 0);
+        iotctrl_7seg_disp_update_as_four_digit_float(handle, values[i][0], 0);
       }
-      sleep(1);
+      sleep(2);
     }
   }
   printf("Done\n");
