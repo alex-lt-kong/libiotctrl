@@ -48,12 +48,15 @@ used again. `man sigaction` describes more possible sa_flags. */
 void print_help_then_exit(char **argv) {
   // clang-format off
   printf("Usage: %s\n"
-         "    -p, --device-path  <device_path> The path of the GPIO device, typically something like /dev/gpiochip0\n"
+         "    -p, --device-path  <device_path> The path of the GPIO device. For Raspberry Pi 3B+, it should be /dev/gpiochip0 (This chip controls all 40 GPIO pins)\n"
          "    -d, --data-pin     <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the DIO pin (default: 17)\n"
          "    -c, --chain-count  <count>       Number of four-digit displays that are daisy chained together, it should typically be 1 or 2\n"
          "    -s, --clock-pin    <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the SCLK (clock signal) pin (default: 11)\n"
          "    -l, --latch-pin    <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the RCLK (register clock) (default: 18)\n"
-         "    -r, --refresh-rate <rate>        How frequent are single digits being refreshed. (default: 1KHz)\n",
+         "    -r, --refresh-rate <rate>        How frequent are single digits being refreshed. (default: 1KHz)\n"
+         "Note: the following are two tested combinations of parameters that (with proper wiring) work:\n"
+         "    1. -d7  -s5  -l6\n"
+         "    2. -d17 -s11 -l18\n",
          argv[0]);
   // clang-format on
   _exit(0);
@@ -91,7 +94,7 @@ void parse_arguments(int argc, char **argv,
     case 'c':
       conn->chain_num = atoi(optarg);
       break;
-    case 'o':
+    case 's':
       conn->clock_pin_num = atoi(optarg);
       break;
     case 'l':

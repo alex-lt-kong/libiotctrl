@@ -178,12 +178,26 @@ iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
     return NULL;
   }
 
+  // We'd better separate these three gpiod_chip_get_line() calls so that in
+  // case of incorrect wiring, we will know which wire is incorrectly connected.
   h->line_data = gpiod_chip_get_line(h->chip, h->data);
+  if (h->line_data == NULL) {
+    fprintf(stderr, "gpiod_chip_get_line(h->chip, h->data) failed: %d(%s)\n",
+            errno, strerror(errno));
+    iotctrl_7seg_disp_destory(h);
+    return NULL;
+  }
   h->line_clk = gpiod_chip_get_line(h->chip, h->clk);
+  if (h->line_clk == NULL) {
+    fprintf(stderr, "gpiod_chip_get_line(h->chip, h->clk) failed: %d(%s)\n",
+            errno, strerror(errno));
+    iotctrl_7seg_disp_destory(h);
+    return NULL;
+  }
   h->line_latch = gpiod_chip_get_line(h->chip, h->latch);
-  if (h->line_data == NULL || h->line_clk == NULL || h->line_latch == NULL) {
-    fprintf(stderr, "gpiod_chip_get_line() failed %d(%s)\n", errno,
-            strerror(errno));
+  if (h->line_latch == NULL) {
+    fprintf(stderr, "gpiod_chip_get_line(h->chip, h->latch) failed: %d(%s)\n",
+            errno, strerror(errno));
     iotctrl_7seg_disp_destory(h);
     return NULL;
   }
