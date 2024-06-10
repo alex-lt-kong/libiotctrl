@@ -50,7 +50,7 @@ void print_help_then_exit(char **argv) {
   printf("Usage: %s\n"
          "    -p, --device-path <device_path> The path of the GPIO device, typically something like /dev/gpiochip0\n"
          "    -d, --data-pin    <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the DIO pin\n"
-         "    -n, --digit-count <count>       Number of digit of a digital tube, it must be either four or eight\n",
+         "    -c, --chain-count <count>       Number of four-digit displays that are daisy chained together, it should typically be 1 or 2\n",
          argv[0]);
   // clang-format on
   _exit(0);

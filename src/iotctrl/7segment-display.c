@@ -54,6 +54,8 @@ void iotctrl_7seg_disp_destory(struct iotctrl_7seg_disp_handle *handle) {
 
   free(handle->digit_values);
   free(handle->per_digit_dots);
+
+  free(handle);
 }
 
 void iotctrl_7seg_disp_update_digit(struct iotctrl_7seg_disp_handle *h, int idx,
@@ -71,7 +73,6 @@ void iotctrl_7seg_disp_update_as_four_digit_float(
   int idx = float_idx * DIGIT_PER_MODULE;
   h->per_digit_dots[idx + 2] = 1;
 
-  bool still_zero = true;
   if (val >= 0) {
 
     h->digit_values[idx + 0] = table[(int)fabs(val) % 1000 / 100];
@@ -119,6 +120,15 @@ void *ev_display_refresh_thread(void *ctx) {
   return NULL;
 }
 
+void iotctrl_7seg_disp_turn_on_all_segments(
+    struct iotctrl_7seg_disp_handle *handle, int duration_sec) {
+  for (uint8_t i = 0; i < handle->digit_count; ++i) {
+    iotctrl_7seg_disp_update_digit(
+        handle, i, iotctrl_7seg_disp_chars_table[IOTCTRL_7SEG_DISP_CHARS_ALL]);
+  }
+  sleep(duration_sec);
+}
+
 struct iotctrl_7seg_disp_handle *
 iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
 
@@ -134,6 +144,7 @@ iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
     return NULL;
   }
 
+  h->ev_flag = 0;
   h->data = conn.data_pin_num;
   h->clk = conn.clock_pin_num;
   h->latch = conn.latch_pin_num;

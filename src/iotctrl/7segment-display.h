@@ -99,10 +99,10 @@ void iotctrl_7seg_disp_update_digit(struct iotctrl_7seg_disp_handle *h, int idx,
  * @brief The 7-segment display's digits are grouped as four-digit
  * fixed-point float with one decimal place. This function is a convenient
  * way to update the display with such float input.
- * @param val The float object to be shown. Its valid range is [-99.9,
- * 999.9]. Invalid input will be reset to 0.0
+ * @param val The float object to be shown. Its valid range is (-100, 1000).
+ * Invalid input will be reset to 0.
  * @param float_idx The zero-index pointer denoting which float is to be
- * updated. For a 8-digit digital tube, float_idx can be either 0 or 1.
+ * updated. For an 8-digit digital tube, float_idx can be either 0 or 1.
  * */
 void iotctrl_7seg_disp_update_as_four_digit_float(
     struct iotctrl_7seg_disp_handle *h, float val, int float_idx);
@@ -112,5 +112,8 @@ void iotctrl_7seg_disp_update_as_four_digit_float(
  * not needed
  * */
 void iotctrl_7seg_disp_destory(struct iotctrl_7seg_disp_handle *handle);
+
+void iotctrl_7seg_disp_turn_on_all_segments(
+    struct iotctrl_7seg_disp_handle *handle, int duration_sec);
 
 #endif // LIBIOTCTRL_SEVEN_SEGMENT_DISPLAY_H
