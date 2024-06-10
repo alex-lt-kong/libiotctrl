@@ -48,16 +48,19 @@ used again. `man sigaction` describes more possible sa_flags. */
 void print_help_then_exit(char **argv) {
   // clang-format off
   printf("Usage: %s\n"
-         "    -p, --device-path <device_path> The path of the GPIO device, typically something like /dev/gpiochip0\n"
-         "    -d, --data-pin    <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the DIO pin\n"
-         "    -c, --chain-count <count>       Number of four-digit displays that are daisy chained together, it should typically be 1 or 2\n",
+         "    -p, --device-path  <device_path> The path of the GPIO device, typically something like /dev/gpiochip0\n"
+         "    -d, --data-pin     <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the DIO pin (default: 17)\n"
+         "    -c, --chain-count  <count>       Number of four-digit displays that are daisy chained together, it should typically be 1 or 2\n"
+         "    -s, --clock-pin    <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the SCLK (clock signal) pin (default: 11)\n"
+         "    -l, --latch-pin    <pin_number>  The GPIO pin number in GPIO/BCM schema that connects to the RCLK (register clock) (default: 18)\n"
+         "    -r, --refresh-rate <rate>        How frequent are single digits being refreshed. (default: 1KHz)\n",
          argv[0]);
   // clang-format on
   _exit(0);
 }
 
-void parse_arguments(int argc, char **argv, char **device_path,
-                     ssize_t *data_pin, ssize_t *chain_count) {
+void parse_arguments(int argc, char **argv,
+                     struct iotctrl_7seg_disp_connection *conn) {
   int c;
   // https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
   while (1) {
@@ -65,60 +68,68 @@ void parse_arguments(int argc, char **argv, char **device_path,
         {"device-path", required_argument, 0, 'p'},
         {"data-pin", required_argument, 0, 'd'},
         {"chain-count", required_argument, 0, 'c'},
+        {"clock-pin", required_argument, 0, 's'},
+        {"latch-pin", required_argument, 0, 'l'},
+        {"refresh-rate", required_argument, 0, 'r'},
         {"help", no_argument, 0, 'h'},
         {NULL, 0, NULL, 0}};
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    c = getopt_long(argc, argv, "p:d:c:h", long_options, &option_index);
+    c = getopt_long(argc, argv, "p:d:c:s:l:r:h", long_options, &option_index);
 
     /* Detect the end of the options. */
     if (c == -1)
       break;
     switch (c) {
     case 'p':
-      *device_path = optarg;
+      strncpy(conn->gpiochip_path, optarg, PATH_MAX);
       break;
     case 'd':
-      *data_pin = atoi(optarg);
+      conn->data_pin_num = atoi(optarg);
       break;
     case 'c':
-      *chain_count = atoi(optarg);
+      conn->chain_num = atoi(optarg);
+      break;
+    case 'o':
+      conn->clock_pin_num = atoi(optarg);
+      break;
+    case 'l':
+      conn->latch_pin_num = atoi(optarg);
+      break;
+    case 'r':
+      conn->refresh_rate_hz = atoi(optarg);
       break;
     case 'h':
       print_help_then_exit(argv);
       break;
     default:
-      print_help_then_exit(argv);
+      break;
     }
-  }
-  if (*device_path == NULL || *data_pin <= 0 || *chain_count < 0) {
-    print_help_then_exit(argv);
   }
 }
 
 int main(int argc, char **argv) {
   int retval = 0;
-  ssize_t data_pin = -1, chain_count = -1;
-  char *gpio_device_path = NULL;
   if (install_signal_handler() != 0) {
     retval = -1;
     goto err_signal_handler_install;
   }
   struct iotctrl_7seg_disp_connection conn;
-  parse_arguments(argc, argv, &gpio_device_path, &data_pin, &chain_count);
-  conn.data_pin_num = data_pin;
+  conn.data_pin_num = 17;
   conn.clock_pin_num = 11;
   conn.latch_pin_num = 18;
-  conn.chain_num = chain_count;
+  conn.chain_num = 2;
   conn.refresh_rate_hz = 1000;
-  strcpy(conn.gpiochip_path, gpio_device_path);
+  strcpy(conn.gpiochip_path, "/dev/gpiochip0");
+  parse_arguments(argc, argv, &conn);
 
   printf("Parameters:\n");
   printf("data_pin_num: %d\n", conn.data_pin_num);
   printf("clock_pin_num: %d\n", conn.clock_pin_num);
   printf("latch_pin_num: %d\n", conn.latch_pin_num);
   printf("chain_num: %d\n", conn.chain_num);
+  printf("refresh_rate_hz: %d\n", conn.refresh_rate_hz);
   printf("gpiochip_path: %s\n", conn.gpiochip_path);
 
   struct iotctrl_7seg_disp_handle *handle;
@@ -137,14 +148,11 @@ int main(int argc, char **argv) {
   const size_t len = sizeof(values) / sizeof(values[0]);
 
   while (!ev_flag) {
-    for (uint8_t i = 0; i < handle->digit_count && !ev_flag; ++i) {
-      iotctrl_7seg_disp_update_digit(
-          handle, i,
-          iotctrl_7seg_disp_chars_table[IOTCTRL_7SEG_DISP_CHARS_ALL]);
-    }
-    sleep(1);
+    int sec = 5;
+    printf("Turning on all segments for %d seconds\n", sec);
+    iotctrl_7seg_disp_turn_on_all_segments(handle, sec);
     for (size_t i = 0; i < len && !ev_flag; ++i) {
-      if (chain_count == 2) {
+      if (conn.chain_num == 2) {
         printf("Now showing: %.1f, %.1f\n", values[i][0], values[i][1]);
         iotctrl_7seg_disp_update_as_four_digit_float(handle, values[i][0], 0);
         iotctrl_7seg_disp_update_as_four_digit_float(handle, values[i][1], 1);

@@ -45,11 +45,14 @@ struct iotctrl_7seg_disp_connection {
   // be 2
   uint8_t chain_num;
   char gpiochip_path[PATH_MAX + 1];
-  // How frequent is single digit being refreshed.
-  // This parameter is highly hardware-dependent and one may need to take a
-  // trial-and-error approach to ascertain the balance between minimal flashing
-  // display and CPU use. A good starting point is 1KHz then plus/minus by a
-  // factor of 2
+  // How frequent are single digits being refreshed. If the display has eight
+  // digits, and the refresh rate is 800Hz, each digit is refreshed 100 times a
+  // second.
+  //
+  // This parameter is highly hardware-dependent and one may need to
+  // take a trial-and-error approach to ascertain the balance between minimal
+  // flashing display and CPU use. A good starting point is 1KHz then plus/minus
+  // by a factor of 2
   uint16_t refresh_rate_hz;
 };
 
