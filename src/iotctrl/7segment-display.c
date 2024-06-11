@@ -38,10 +38,14 @@ uint8_t handle_dot(uint8_t value, bool turn_it_on) {
   return turn_it_on ? value & 0b01111111 : value;
 }
 
-void iotctrl_7seg_disp_destory(struct iotctrl_7seg_disp_handle *handle) {
-  handle->ev_flag = 1;
-  if (handle->th_display_refresh != 0)
-    (void)pthread_join(handle->th_display_refresh, NULL);
+void iotctrl_7seg_disp_destroy(struct iotctrl_7seg_disp_handle *handle) {
+  // TODO: There is still a rare race condition, we probably need a mutex to
+  // handle it correctly.
+  if (handle->ev_flag == 0) {
+    handle->ev_flag = 1;
+    if (handle->th_display_refresh != 0)
+      (void)pthread_join(handle->th_display_refresh, NULL);
+  }
 
   if (handle->line_data != NULL)
     gpiod_line_release(handle->line_data);
@@ -114,6 +118,9 @@ int update_display(struct iotctrl_7seg_disp_handle *h) {
 
 void *ev_display_refresh_thread(void *ctx) {
   struct iotctrl_7seg_disp_handle *h = (struct iotctrl_7seg_disp_handle *)ctx;
+  // TODO: There is still a rare race condition, we probably need a mutex to
+  // handle it correctly.
+  h->ev_flag = 0;
   while (!h->ev_flag) {
     update_display(h);
   }
@@ -144,7 +151,7 @@ iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
     return NULL;
   }
 
-  h->ev_flag = 0;
+  h->ev_flag = 1;
   h->data = conn.data_pin_num;
   h->clk = conn.clock_pin_num;
   h->latch = conn.latch_pin_num;
@@ -157,13 +164,13 @@ iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
 
   if (h->digit_values == NULL) {
     perror("calloc()");
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
   h->per_digit_dots = calloc(sizeof(uint8_t), h->digit_count);
   if (h->per_digit_dots == NULL) {
     perror("calloc()");
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
   // Per
@@ -180,46 +187,61 @@ iotctrl_7seg_disp_init(const struct iotctrl_7seg_disp_connection conn) {
 
   // We'd better separate these three gpiod_chip_get_line() calls so that in
   // case of incorrect wiring, we will know which wire is incorrectly connected.
+
+  // See if we can refactor this snippet
+  h->line_data = NULL;
+  h->line_clk = NULL;
+  h->line_latch = NULL;
   h->line_data = gpiod_chip_get_line(h->chip, h->data);
   if (h->line_data == NULL) {
     fprintf(stderr, "gpiod_chip_get_line(h->chip, h->data) failed: %d(%s)\n",
             errno, strerror(errno));
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
+  if (gpiod_line_request_output(h->line_data, "7-segment-display", 0) != 0) {
+    fprintf(stderr, "gpiod_line_request_output(h->line_data) failed\n");
+    iotctrl_7seg_disp_destroy(h);
+    return NULL;
+  }
+
   h->line_clk = gpiod_chip_get_line(h->chip, h->clk);
   if (h->line_clk == NULL) {
     fprintf(stderr, "gpiod_chip_get_line(h->chip, h->clk) failed: %d(%s)\n",
             errno, strerror(errno));
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
+  if (gpiod_line_request_output(h->line_clk, "7-segment-display", 0) != 0) {
+    fprintf(stderr, "gpiod_line_request_output(h->line_clk) failed\n");
+    iotctrl_7seg_disp_destroy(h);
+    return NULL;
+  }
+
   h->line_latch = gpiod_chip_get_line(h->chip, h->latch);
   if (h->line_latch == NULL) {
     fprintf(stderr, "gpiod_chip_get_line(h->chip, h->latch) failed: %d(%s)\n",
             errno, strerror(errno));
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
-
-  if (gpiod_line_request_output(h->line_data, "7-segment-display", 0) != 0 ||
-      gpiod_line_request_output(h->line_clk, "7-segment-display", 0) != 0 ||
-      gpiod_line_request_output(h->line_latch, "7-segment-display", 0) != 0) {
-    fprintf(stderr, "gpiod_line_request_output() failed\n");
-    iotctrl_7seg_disp_destory(h);
+  if (gpiod_line_request_output(h->line_latch, "7-segment-display", 0) != 0) {
+    fprintf(stderr, "gpiod_line_request_output(h->line_latch) failed\n");
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
+  // See if we can refactor this snippet
 
   if (gpiod_line_set_value(h->line_clk, 0) != 0 ||
       gpiod_line_set_value(h->line_latch, 0) != 0) {
     fprintf(stderr, "gpiod_line_set_value() failed\n");
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
   if (pthread_create(&h->th_display_refresh, NULL, ev_display_refresh_thread,
                      h) != 0) {
     fprintf(stderr, "pthread_create() failed: %d(%s)", errno, strerror(errno));
-    iotctrl_7seg_disp_destory(h);
+    iotctrl_7seg_disp_destroy(h);
     return NULL;
   }
   return h;

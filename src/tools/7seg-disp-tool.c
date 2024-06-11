@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
     }
   }
   printf("Done\n");
-  iotctrl_7seg_disp_destory(handle);
+  iotctrl_7seg_disp_destroy(handle);
 err_signal_handler_install:
   return retval;
 }

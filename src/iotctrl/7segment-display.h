@@ -114,7 +114,7 @@ void iotctrl_7seg_disp_update_as_four_digit_float(
  * @brief Release GPIO resources and internal thread after the 7seg display is
  * not needed
  * */
-void iotctrl_7seg_disp_destory(struct iotctrl_7seg_disp_handle *handle);
+void iotctrl_7seg_disp_destroy(struct iotctrl_7seg_disp_handle *handle);
 
 void iotctrl_7seg_disp_turn_on_all_segments(
     struct iotctrl_7seg_disp_handle *handle, int duration_sec);
