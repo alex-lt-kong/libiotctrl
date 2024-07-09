@@ -1,3 +1,9 @@
+#ifndef LIBIOTCTRL_DHT31_H
+#define LIBIOTCTRL_DHT31_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -23,3 +29,9 @@ int iotctrl_dht31_read(const int fd, float *temp_celsius,
                        float *relative_humidity);
 
 void iotctrl_dht31_destroy(const int fd);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // LIBIOTCTRL_DHT31_H

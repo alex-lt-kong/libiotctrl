@@ -1,6 +1,10 @@
 #ifndef LIBIOTCTRL_SEVEN_SEGMENT_DISPLAY_H
 #define LIBIOTCTRL_SEVEN_SEGMENT_DISPLAY_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <limits.h>
 #include <signal.h>
 #include <stdbool.h>
@@ -118,5 +122,9 @@ void iotctrl_7seg_disp_destroy(struct iotctrl_7seg_disp_handle *handle);
 
 void iotctrl_7seg_disp_turn_on_all_segments(
     struct iotctrl_7seg_disp_handle *handle, int duration_sec);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // LIBIOTCTRL_SEVEN_SEGMENT_DISPLAY_H
