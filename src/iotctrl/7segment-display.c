@@ -39,6 +39,7 @@ uint8_t handle_dot(uint8_t value, bool turn_it_on) {
 }
 
 void iotctrl_7seg_disp_destroy(struct iotctrl_7seg_disp_handle *handle) {
+  if (handle == NULL) return;
   // TODO: There is still a rare race condition, we probably need a mutex to
   // handle it correctly.
   if (handle->ev_flag == 0) {
