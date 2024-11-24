@@ -88,4 +88,10 @@ int iotctrl_dht31_read(const int fd, float *temp_celsius,
   return 0;
 }
 
-void iotctrl_dht31_destroy(const int fd) { close(fd); }
+void iotctrl_dht31_destroy(const int fd) {
+  if (fd >= 0)
+    close(fd);
+  else
+    fprintf(stderr, "Warning: trying to destroy an invalid dht31 handle (%d)\n",
+            fd);
+}
