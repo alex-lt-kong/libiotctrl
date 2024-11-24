@@ -12,13 +12,13 @@
 int iotctrl_dht31_init(const char *device_path) {
   int fd;
   if ((fd = open(device_path, O_RDWR)) < 0) {
-    fprintf(stderr, "Failed to open(%s): %d(%s)", device_path, errno,
+    fprintf(stderr, "Failed to open(%s): %d(%s)\n", device_path, errno,
             strerror(errno));
   }
 
   // Get I2C device, SHT31 I2C address is 0x44(68)
   if (ioctl(fd, I2C_SLAVE, 0x44) != 0) {
-    fprintf(stderr, "Failed to ioctl(%s): %d(%s)", device_path, errno,
+    fprintf(stderr, "Failed to ioctl(%s): %d(%s)\n", device_path, errno,
             strerror(errno));
   }
   return fd;
@@ -56,7 +56,7 @@ int iotctrl_dht31_read(const int fd, float *temp_celsius,
   // Command msb, command lsb(0x2C, 0x06)
   uint8_t config[2] = {0x2C, 0x06};
   if (write(fd, config, 2) != 2) {
-    fprintf(stderr, "Failed to write() command to fd %d: %d(%s)", fd, errno,
+    fprintf(stderr, "Failed to write() command to fd %d: %d(%s)\n", fd, errno,
             strerror(errno));
     return -1;
   }
@@ -66,7 +66,7 @@ int iotctrl_dht31_read(const int fd, float *temp_celsius,
   // humidity CRC
   uint8_t buf[6] = {0};
   if (read(fd, buf, 6) != 6) {
-    fprintf(stderr, "Failed to read() values from fd %d: %d(%s).", fd, errno,
+    fprintf(stderr, "Failed to read() values from fd %d: %d(%s)\n", fd, errno,
             strerror(errno));
     return -1;
   }
@@ -77,7 +77,7 @@ int iotctrl_dht31_read(const int fd, float *temp_celsius,
   if (buf[2] != crc8(buf, 2) || buf[5] != crc8(buf + 3, 2)) {
     fprintf(stderr,
             "Data read from fd %d but CRC8 failed. Retrieved (erroneous) "
-            "readings are %f (temperature, °C), %f (relative humidity, %%)",
+            "readings are %f (temperature, °C), %f (relative humidity, %%)\n",
             fd, temp_celsius_t, relative_humidity_t);
     return -1;
   }
@@ -92,6 +92,7 @@ void iotctrl_dht31_destroy(const int fd) {
   if (fd >= 0)
     close(fd);
   else
-    fprintf(stderr, "Warning: trying to destroy an invalid dht31 handle (%d)\n",
+    fprintf(stderr,
+            "Warning: trying to destroy an invalid dht31 handle (fd: %d)\n",
             fd);
 }
